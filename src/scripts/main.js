@@ -1,6 +1,5 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Draggable } from 'gsap/Draggable';
 import { initSmooth, lenis } from './smooth.js';
 import { initUI } from './ui.js';
 import { initSections } from './sections.js';
@@ -8,7 +7,7 @@ import { initReplays } from './replays.js';
 import { initColdOpen } from './coldopen.js';
 import { goTo } from './nav.js';
 
-gsap.registerPlugin(ScrollTrigger, Draggable);
+gsap.registerPlugin(ScrollTrigger);
 
 initSmooth();
 // The story always starts at the top (pinned sections misbehave when restored mid-way).

@@ -1,7 +1,6 @@
 // Scroll choreography for every section.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Draggable } from 'gsap/Draggable';
 import * as fx from './fx.js';
 import { reduced, lock, unlock, jump, velocity } from './smooth.js';
 import { say, cardIn, primeCard, goTo, isQuiet, quiet } from './nav.js';
@@ -261,27 +260,26 @@ function initJourney(mm) {
   });
 }
 
-// ── EP.05 Slice of life: polaroids and a sleepy Shih Tzu ──
+// ── EP.05 Slice of life: a night-time manga page and a sleepy Shih Tzu ──
 function initSlice(mm) {
-  const desk = $('.desk');
-  const polaroids = $$('.polaroid', desk);
-  let dragged = false, z = 10;
-  polaroids.forEach((p) => p.addEventListener('click', () => {
-    if (dragged) return;
-    p.setAttribute('aria-pressed', p.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
-  }));
-  mm.add('(min-width: 901px)', () => {
-    const d = Draggable.create(polaroids, {
-      bounds: desk, minimumMovement: 6, zIndexBoost: false,
-      onPress() { this.target.style.zIndex = String(++z); },
-      onDragStart() { dragged = true; gsap.to(this.target, { scale: 1.06, duration: 0.15 }); },
-      onDragEnd() { gsap.to(this.target, { scale: 1, duration: 0.25 }); setTimeout(() => { dragged = false; }, 60); },
+  const sec = $('#ep05');
+  mm.add(MOTION, () => {
+    // Panels ink in top to bottom, then their sound effects pop.
+    $$('.scene', sec).forEach((s, i) => {
+      const delay = (i % 3) * 0.12;
+      const st = { trigger: s, start: 'top 88%', once: true };
+      gsap.fromTo(s, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.9, delay, ease: 'power3.inOut', scrollTrigger: st, clearProps: 'clipPath' });
+      const pop = $('.sfx', s);
+      if (pop) gsap.from(pop, { scale: 0, rotation: '-=40', duration: 0.5, delay: delay + 0.6, ease: 'back.out(2.2)', scrollTrigger: { ...st }, clearProps: 'transform' });
+      const art = $('.scene__art', s);
+      if (art) gsap.fromTo(art, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: s, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
-    if (!reduced) gsap.from(polaroids, { y: -120, rotation: (i) => (i % 2 ? 25 : -25), opacity: 0, stagger: 0.1, duration: 0.7, ease: 'back.out(1.4)', scrollTrigger: { trigger: desk, start: 'top 70%' } });
-    return () => d.forEach((x) => x.kill());
+    gsap.from('.page__drone', { x: '-40vw', y: 80, rotation: -20, opacity: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.page', start: 'top 80%', once: true } });
+    gsap.fromTo('.slice__marquee span', { xPercent: 0 }, { xPercent: -25, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.from('.quests li, .quests__book', { y: 18, opacity: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out', scrollTrigger: { trigger: '.quests', start: 'top 85%', once: true } });
   });
 
-  const bed = $('.bed'), count = $('.bed__count');
+  const bed = $('.nap', sec), count = $('.nap__count', sec);
   let n = 0, t;
   bed.addEventListener('click', () => {
     if (bed.classList.contains('is-awake')) return;
@@ -289,7 +287,7 @@ function initSlice(mm) {
     clearTimeout(t);
     if (n < 5) {
       count.textContent = `zzz… (${n}/5)`;
-      if (!reduced) gsap.fromTo($('.bed__dog--sleep', bed), { rotation: -3 }, { rotation: 0, duration: 0.4, ease: 'elastic.out(1, 0.3)' });
+      if (!reduced) gsap.fromTo($('.nap__dog--sleep img', bed), { rotation: -3 }, { rotation: 0, duration: 0.4, ease: 'elastic.out(1, 0.3)' });
       t = setTimeout(() => { n = 0; count.textContent = ''; }, 2500);
       return;
     }

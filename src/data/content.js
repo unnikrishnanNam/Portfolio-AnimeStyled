@@ -122,12 +122,20 @@ export const tiles = [
 
 export const inProduction = ['GlassNotch: the MacBook notch as a Liquid Glass island', 'A native macOS video editor', 'A self-hosted family cloud'];
 
+// Slice of life: each photo is a manga panel with a sound effect. `pos` frames the crop.
 export const photos = [
-  { art: 'PH-01', caption: 'Drone shot. One very small drone, one very big sky.' },
-  { art: 'PH-02', fallback: 'CH-05', caption: 'Hilltop. The clouds got there first.' },
-  { art: 'PH-03', caption: 'Day out with the squad. Nobody mentioned Kubernetes. Once.' },
-  { art: 'PH-04', caption: 'Muffins, co-pilot. Strict about the playlist.' },
+  { art: 'PH-01', caption: 'Drone shot. One very small drone, one very big sky.', sfx: 'BZZZ', pos: '50% 55%' },
+  { art: 'PH-02', fallback: 'CH-05', caption: 'Hilltop. The clouds got there first.', sfx: 'FWOOSH', pos: '50% 50%' },
+  { art: 'PH-03', caption: 'Day out with the squad. Nobody mentioned Kubernetes. Once.', sfx: 'HAHA!', pos: '50% 30%' },
+  { art: 'PH-04', caption: 'Muffins, co-pilot. Strict about the playlist.', sfx: 'VROOM', pos: '50% 78%' },
 ];
+
+export const sideQuests = [
+  { name: 'GlassNotch', text: 'The MacBook notch as a Liquid Glass island.' },
+  { name: 'Video editor', text: 'A native macOS video editor.' },
+  { name: 'Family cloud', text: 'A self-hosted family cloud.' },
+];
+export const nightstand = 'The Indian business ecosystem. Long-term goal: an infrastructure company.';
 
 export const reactions = [
   { id: 'R-01', label: 'Confused', emoji: '😵‍💫' },

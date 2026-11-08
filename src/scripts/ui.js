@@ -121,7 +121,7 @@ function initPaw() {
   window.addEventListener('pointermove', (e) => {
     xTo(e.clientX); yTo(e.clientY);
     const t = e.target instanceof Element ? e.target : null;
-    paw.classList.toggle('is-hot', !!(t && t.closest('a, button, [role="option"], label, input, .polaroid')));
+    paw.classList.toggle('is-hot', !!(t && t.closest('a, button, [role="option"], label, input')));
     paw.classList.toggle('is-dark', !!(t && t.closest('.on-dark, .battle, .credits, .slice, .cold, .palette, .notch')));
   }, { passive: true });
   document.addEventListener('pointerleave', () => html.classList.remove('has-paw'));
