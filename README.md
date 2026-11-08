@@ -30,3 +30,10 @@ Your Opscope screenshot goes in `assets/raw/screenshots/SCR-01-opscope.png`. A `
 - Motion: `src/scripts/` (`sections.js` for scroll choreography, `fx.js` for transitions, `replays.js` for the battle replays)
 
 Reduced motion turns every transition into a short fade, unpins the Battle and Journey arcs, and freezes loops on their first frame.
+
+## Deploy
+
+Every push to `main` builds and publishes the site to GitHub Pages (`.github/workflows/deploy.yml`):
+https://unnikrishnannam.github.io/Portfolio-AnimeStyled/
+
+The workflow passes the Pages URL in as `SITE_URL` and `BASE_PATH`, so a custom domain later needs no code change: set it under Settings → Pages. To check a production build under the Pages sub-path locally, run the `pages-preview` launch config (or `BASE_PATH=/Portfolio-AnimeStyled npm run build && BASE_PATH=/Portfolio-AnimeStyled npx astro preview`) and open http://localhost:4321/Portfolio-AnimeStyled/.

@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Art from '../Art.astro';
 import { person } from '../../data/content.js';
+import { withBase } from '../../lib/base.js';
 const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.resume));
 ---
 <section class="sc finale" id="ep06" data-ep="ep06" data-fx="eyecatch" data-ec="3" aria-labelledby="finale-h">
@@ -25,7 +26,7 @@ const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.
         <a class="btn" href={person.links.github} target="_blank" rel="noopener">GitHub ↗</a>
         <a class="btn" href={person.links.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
         <a class="btn" href={person.links.leetcode} target="_blank" rel="noopener">LeetCode ↗</a>
-        {hasResume && <a class="btn btn--yellow" href={person.links.resume} target="_blank" rel="noopener">Résumé ↗</a>}
+        {hasResume && <a class="btn btn--yellow" href={withBase(person.links.resume)} target="_blank" rel="noopener">Résumé ↗</a>}
       </div>
       <p class="contact__email mono"><a href={`mailto:${person.email}`}>{person.email}</a></p>
     </div>

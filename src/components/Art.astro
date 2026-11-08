@@ -4,6 +4,7 @@
 // - Loops: animated WebP, swapped for the poster frame under reduced motion.
 // - Missing: tries `fallback`, then shows a labelled placeholder in dev (nothing in production).
 import media from '../data/media.json';
+import { withBase } from '../lib/base.js';
 
 interface Props {
   id: string;
@@ -23,8 +24,8 @@ const chain = [id, ...(Array.isArray(fallback) ? fallback : fallback ? [fallback
 const useId = chain.find((k) => lib[k]);
 const m = useId ? lib[useId] : null;
 const p = useId ? lib[useId + '@p'] : null;
-const srcset = (e: any, fmt: string) => e.widths.map((w: number) => `${e.base}-${w}.${fmt} ${w}w`).join(', ');
-const largest = (e: any) => `${e.base}-${Math.max(...e.widths)}.webp`;
+const srcset = (e: any, fmt: string) => e.widths.map((w: number) => `${withBase(e.base)}-${w}.${fmt} ${w}w`).join(', ');
+const largest = (e: any) => `${withBase(e.base)}-${Math.max(...e.widths)}.webp`;
 const loading = eager ? 'eager' : 'lazy';
 const showPlaceholder = import.meta.env.DEV;
 const aspect = ratio || (m && m.w && m.h ? `${m.w} / ${m.h}` : undefined);
@@ -40,12 +41,12 @@ const aspect = ratio || (m && m.w && m.h ? `${m.w} / ${m.h}` : undefined);
 )}
 {m && m.kind === 'anim' && (
   <picture class:list={['art', 'art--anim', cls]} data-art={useId} data-want={id !== useId ? id : undefined} style={style}>
-    <source media="(prefers-reduced-motion: reduce)" srcset={m.poster} />
-    <img src={m.src} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" draggable="false" data-poster={m.poster} data-duration={m.delay ? m.delay.reduce((a: number, b: number) => a + b, 0) : undefined} data-once={m.once ? '' : undefined} {...rest} />
+    <source media="(prefers-reduced-motion: reduce)" srcset={withBase(m.poster)} />
+    <img src={withBase(m.src)} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" draggable="false" data-poster={withBase(m.poster)} data-duration={m.delay ? m.delay.reduce((a: number, b: number) => a + b, 0) : undefined} data-once={m.once ? '' : undefined} {...rest} />
   </picture>
 )}
 {m && m.kind === 'video' && (
-  <video class:list={['art', cls]} data-art={useId} src={m.src} autoplay muted loop playsinline style={style} aria-label={alt}></video>
+  <video class:list={['art', cls]} data-art={useId} src={withBase(m.src)} autoplay muted loop playsinline style={style} aria-label={alt}></video>
 )}
 {!m && showPlaceholder && (
   <div class:list={['art', 'art--todo', cls]} data-todo={id} style={`${aspect ? `aspect-ratio:${aspect};` : ''}${style}`} role="img" aria-label={alt}>

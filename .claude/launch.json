@@ -1,6 +1,12 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "site", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 4321 }
+    { "name": "site", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 4321 },
+    {
+      "name": "pages-preview",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "SITE_URL=https://unnikrishnannam.github.io BASE_PATH=/Portfolio-AnimeStyled npx astro build && SITE_URL=https://unnikrishnannam.github.io BASE_PATH=/Portfolio-AnimeStyled npx astro preview --port 4322"],
+      "port": 4322
+    }
   ]
 }

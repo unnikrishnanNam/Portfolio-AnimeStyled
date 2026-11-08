@@ -14,8 +14,11 @@ const mediaWatch = {
   },
 };
 
+// The GitHub Pages workflow passes the real URL: SITE_URL is the origin, BASE_PATH the sub-path
+// ("/Portfolio-AnimeStyled" today, empty once a custom domain is set). Locally the site runs at "/".
 export default defineConfig({
-  site: 'https://unnikrishnanek.com',
+  site: process.env.SITE_URL || 'https://unnikrishnannam.github.io',
+  base: process.env.BASE_PATH || '/',
   build: { inlineStylesheets: 'auto' },
   integrations: [mediaWatch],
   devToolbar: { enabled: false },

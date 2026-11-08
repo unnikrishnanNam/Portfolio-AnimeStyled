@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { episodes, person } from '../../data/content.js';
+import { withBase } from '../../lib/base.js';
 const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.resume));
 const all = [
   ...episodes.map((e) => ({ label: `Jump to EP.${e.n} ${e.name}`, act: `goto:${e.id}`, hint: '↵', keys: `episode ${e.short} ${e.ml}` })),
@@ -9,7 +10,7 @@ const all = [
   { label: 'Copy email address', act: 'copy-email', hint: 'copy', keys: 'mail contact email hire' },
   { label: 'Open GitHub', act: `open:${person.links.github}`, hint: '↗', keys: 'code repos github' },
   { label: 'Open LinkedIn', act: `open:${person.links.linkedin}`, hint: '↗', keys: 'linkedin cv' },
-  { label: 'Open résumé', act: `open:${person.links.resume}`, hint: '↗', keys: 'resume cv pdf', resume: true },
+  { label: 'Open résumé', act: `open:${withBase(person.links.resume)}`, hint: '↗', keys: 'resume cv pdf', resume: true },
   { label: 'Pet Muffins', act: 'pet', hint: '🐾', keys: 'dog muffins pet' },
   { label: 'Toggle super mode', act: 'super', hint: '↑↑↓↓', keys: 'konami rage super' },
   { label: 'Toggle sound effects', act: 'sfx', hint: 'SFX', keys: 'sound audio sfx' },

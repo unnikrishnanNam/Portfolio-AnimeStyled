@@ -3,6 +3,7 @@ import Art from '../Art.astro';
 import EpisodeCard from '../EpisodeCard.astro';
 import media from '../../data/media.json';
 import { chapters, tiles } from '../../data/content.js';
+import { withBase } from '../../lib/base.js';
 
 // Flag positions along the 4-tile track (0..1). Chapters sharing a tile spread out inside it.
 const perTile = tiles.map((_, t) => chapters.filter((c) => c.tile === t).length);
@@ -38,7 +39,7 @@ const walk = (media as Record<string, any>)['GIF-04'];
 
     <div class="journey__walker" aria-hidden="true">
       {walk && walk.kind === 'anim'
-        ? <div class="walker" style={`background-image:url(${walk.strip});aspect-ratio:${walk.w}/${walk.h}`} data-frames={walk.frames}></div>
+        ? <div class="walker" style={`background-image:url(${withBase(walk.strip)});aspect-ratio:${walk.w}/${walk.h}`} data-frames={walk.frames}></div>
         : <Art id="GIF-04" fallback="CH-01" sizes="20vw" alt="" label="walk cycle" />}
     </div>
     <div class="journey__drone" aria-hidden="true"><Art id="DRONE-01" sizes="120px" alt="" label="drone" /></div>
