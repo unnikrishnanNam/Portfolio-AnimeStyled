@@ -1,0 +1,95 @@
+---
+import Art from '../Art.astro';
+import EpisodeCard from '../EpisodeCard.astro';
+---
+<section class="sc origin" id="ep01" data-ep="ep01" data-fx="eyecatch" data-ec="1" aria-labelledby="origin-h">
+  <div class="wrap">
+    <EpisodeCard ep="ep01" />
+    <div class="origin__grid">
+      <div class="manga" data-manga>
+        <figure class="panel panel--1" data-fansub="Kottayam, Kerala. Our hero wanted to know why things break, and how to keep them running.">
+          <div class="panel__art"><Art id="BG-03" sizes="(max-width: 900px) 100vw, 40vw" alt="A rainy night in Kottayam, through the bedroom window" /></div>
+          <figcaption class="caption-box">Flashback. Kottayam, monsoon.</figcaption>
+        </figure>
+        <figure class="panel panel--2">
+          <pre class="panel__term" aria-label="Terminal"><span class="p">$</span> kubectl get pods
+<span class="dim">NAME    READY   STATUS</span>
+api-0   0/1     <span class="r">CrashLoopBackOff</span>
+<span class="p">$</span> why?<span class="cur">_</span></pre>
+        </figure>
+        <figure class="panel panel--3">
+          <div class="panel__speed speedlines" aria-hidden="true"></div>
+          <div class="panel__art"><Art id="CH-02" fallback="CH-04" sizes="(max-width: 900px) 70vw, 26vw" alt="Our hero, arms crossed, glancing sideways" label="arms crossed, side glance" /></div>
+          <figcaption class="caption-box">“I build the tools I wish existed.”</figcaption>
+        </figure>
+        <figure class="panel panel--4">
+          <div class="panel__art"><Art id="MUF-01" sizes="(max-width: 900px) 50vw, 20vw" alt="Muffins the Shih Tzu, sitting with a cheeky underbite grin" /></div>
+          <figcaption class="caption-box">Muffins joins the party.</figcaption>
+        </figure>
+        <svg class="manga__ink" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <path pathLength="1" d="M1 1 H61 V44 H1 Z" />
+          <path pathLength="1" d="M64 1 H99 V44 H64 Z" />
+          <path pathLength="1" d="M1 47 H52 V99 H1 Z" />
+          <path pathLength="1" d="M55 47 H99 V99 H55 Z" />
+        </svg>
+      </div>
+
+      <div class="origin__about">
+        <h3 id="origin-h" class="origin__h">About me</h3>
+        <p class="origin__lead">I’m a software engineer from Kerala, working where backend engineering meets cloud-native infrastructure.</p>
+        <p>I build infrastructure that has to stay up: highly available PostgreSQL on Kubernetes, TLS-secured messaging, and test automation for software that speaks industrial energy protocols.</p>
+        <p>Outside work I build the tools I wish existed, like a proxy that holds destructive SQL for approval and a Kubernetes tool that tells you <em>why</em> something broke. Long-term, I want to build an infrastructure company.</p>
+        <ul class="origin__facts">
+          <li><b>B.Tech CSE</b><span>Amrita Vishwa Vidyapeetham, 2026</span></li>
+          <li><b>Graduate Engineer Trainee</b><span>Kalkitech, Energy IoT, Kochi</span></li>
+          <li><b>CKA · AWS CCP</b><span>Licensed to kubectl</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <aside class="teaser" aria-label="Next episode">
+      <span class="teaser__k">NEXT TIME</span>
+      <p>The CKA exam. Can our hero pass with Muffins sitting on the keyboard?</p>
+    </aside>
+  </div>
+</section>
+
+<style is:global>
+  .origin { background: var(--paper); padding-bottom: clamp(80px, 14vh, 160px); --accent: var(--sky); }
+  .origin::before { content: ''; position: absolute; inset: 0 0 auto auto; width: 46vw; height: 60vh; color: rgba(22, 19, 28, .1); background: radial-gradient(circle, currentColor 1.3px, transparent 1.8px) 0 0 / 9px 9px; -webkit-mask: linear-gradient(225deg, #000 10%, transparent 70%); mask: linear-gradient(225deg, #000 10%, transparent 70%); pointer-events: none; }
+  .origin__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+
+  .manga { position: relative; aspect-ratio: 1 / 1.08; }
+  .panel { position: absolute; margin: 0; overflow: hidden; background: var(--paper); }
+  .panel--1 { left: 1%; top: 1%; width: 60%; height: 43%; }
+  .panel--2 { left: 64%; top: 1%; width: 35%; height: 43%; background: var(--ink); color: #d9f3d4; display: grid; align-items: center; }
+  .panel--3 { left: 1%; top: 47%; width: 51%; height: 52%; }
+  .panel--4 { left: 55%; top: 47%; width: 44%; height: 52%; background: #fff6e5; }
+  .panel__art, .panel__art .art { position: absolute; inset: 0; }
+  .panel__art img { width: 100%; height: 100%; object-fit: cover; }
+  .panel--1 img { filter: grayscale(1) contrast(1.25) brightness(1.05); }
+  .panel--1::after { content: ''; position: absolute; inset: 0; color: rgba(22, 19, 28, .5); background: radial-gradient(circle, currentColor 1px, transparent 1.4px) 0 0 / 5px 5px; mix-blend-mode: multiply; }
+  .panel--3 .panel__art img { object-fit: contain; object-position: 50% 0; transform: scale(1.5); transform-origin: 50% 0; }
+  .panel--4 .panel__art { inset: 10% 6% 0; }
+  .panel--4 .panel__art img { object-fit: contain; object-position: bottom; }
+  .panel__speed { position: absolute; inset: -60%; color: rgba(22, 19, 28, .14); }
+  .panel .caption-box { position: absolute; left: 8px; top: 8px; z-index: 2; max-width: 80%; font-size: clamp(11px, .9vw, 14px); }
+  .panel--3 .caption-box { top: auto; bottom: 10px; left: 10px; }
+  .panel__term { margin: 0; padding: 10px; font-family: var(--f-mono); font-size: clamp(9px, .85vw, 13px); line-height: 1.55; white-space: pre-wrap; }
+  .panel__term .p { color: var(--yellow); }
+  .panel__term .r { color: #ff6b5e; font-weight: 700; }
+  .panel__term .dim { color: #7d8a86; }
+  .panel__term .cur { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .manga__ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .manga__ink path { fill: none; stroke: var(--ink); stroke-width: 4; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+  .origin__h { margin: 0 0 12px; font-family: var(--f-display); font-weight: 400; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: var(--sky); }
+  .origin__lead { margin: 0 0 16px; font-weight: 900; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.25; }
+  .origin__about p:not(.origin__lead) { margin: 0 0 14px; max-width: 54ch; }
+  .origin__facts { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 10px; }
+  .origin__facts li { display: grid; padding: 12px 16px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; box-shadow: 4px 4px 0 var(--ink); }
+  .origin__facts b { font-weight: 900; }
+  .origin__facts span { font-size: .88em; opacity: .75; }
+  @media (max-width: 900px) { .origin__grid { grid-template-columns: 1fr; } }
+</style>

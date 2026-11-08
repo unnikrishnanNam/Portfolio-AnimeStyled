@@ -1,0 +1,31 @@
+# Debug, Deploy, Adventure, Repeat
+
+Unnikrishnan Namboothiri's portfolio, told as a 90s anime series. Astro + GSAP + Lenis.
+
+## Run it
+
+```bash
+npm install
+npm run dev        # http://localhost:4321, also watches assets/raw for new art
+npm run build      # static site in dist/
+```
+
+## Adding art
+
+Drop files into `assets/raw/<folder>/` named by asset ID (`CH-02-arms-crossed.png`, `GIF-02-wake-up.gif`, …). The pipeline in `scripts/media.mjs` turns them into AVIF/WebP in `public/media/` and lists them in `src/data/media.json`.
+
+- `9x16` in a name marks the portrait version of a background.
+- Flat magenta (#FF00FF) backgrounds are keyed out automatically.
+- A `<ID>-…frames.zip` next to a GIF is used instead of the GIF (full colour, no dithering).
+- Missing art shows as a labelled placeholder in dev and is left out of production builds.
+
+Your Opscope screenshot goes in `assets/raw/screenshots/SCR-01-opscope.png`. A `public/resume.pdf` switches on the résumé buttons.
+
+## Where things live
+
+- Story text, skills, bosses, chapters: `src/data/content.js`
+- Sections: `src/components/sections/`
+- Notch, ⌘K palette, transitions, cursor: `src/components/ui/`
+- Motion: `src/scripts/` (`sections.js` for scroll choreography, `fx.js` for transitions, `replays.js` for the battle replays)
+
+Reduced motion turns every transition into a short fade, unpins the Battle and Journey arcs, and freezes loops on their first frame.

@@ -1,0 +1,168 @@
+/* ───────────────────────── Tokens ───────────────────────── */
+:root {
+  --ink: #16131c;
+  --ink-2: #2a2533;
+  --paper: #fbf8f1;
+  --paper-2: #f1ebdd;
+  --sky: #2e9beb;
+  --yellow: #ffd23f;
+  --red: #e5322d;
+  --green: #1e3d33;
+  --gold: #c98a3e;
+  --stone: #a2805a;
+  --orange: #ff7a1a;
+  --night: #0e1022;
+
+  --accent: var(--red);
+
+  --f-display: 'Dela Gothic One', 'Arial Black', system-ui, sans-serif;
+  --f-body: 'Zen Kaku Gothic New', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --f-ml: 'Baloo Chettan 2', 'Noto Sans Malayalam', system-ui, sans-serif;
+  --f-brush: 'Yuji Syuku', 'Dela Gothic One', serif;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --radius: 14px;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --shadow-ink: 6px 6px 0 var(--ink);
+  color-scheme: light;
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+html.is-locked { overflow: hidden; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: clamp(16px, 1.05vw + 8px, 19px);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, picture, video, svg, canvas { display: block; max-width: 100%; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--yellow); color: var(--ink); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.mono { font-family: var(--f-mono); }
+[lang="ml"] { font-family: var(--f-ml); }
+main { position: relative; z-index: 1; }
+
+/* Skip link */
+.skip { position: fixed; left: 12px; top: -60px; z-index: 300; background: var(--yellow); color: var(--ink); padding: 10px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: top .2s; }
+.skip:focus { top: 12px; }
+
+/* ───────────────────────── Art ───────────────────────── */
+.art { display: block; }
+.art img { width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.art--todo {
+  position: relative;
+  display: grid; place-items: center;
+  border: 2px dashed currentColor;
+  border-radius: 12px;
+  color: rgba(22, 19, 28, .55);
+  background:
+    radial-gradient(circle, rgba(22, 19, 28, .14) 1.2px, transparent 1.6px) 0 0 / 10px 10px,
+    rgba(255, 255, 255, .35);
+  min-height: 80px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  text-align: center;
+}
+.art--todo span { display: grid; gap: 2px; padding: 6px 10px; background: rgba(251, 248, 241, .85); border-radius: 6px; color: var(--ink); }
+.art--todo em { font-style: normal; opacity: .7; }
+.on-dark .art--todo, .art--todo.on-dark { color: rgba(251, 248, 241, .6); background: radial-gradient(circle, rgba(255,255,255,.14) 1.2px, transparent 1.6px) 0 0 / 10px 10px, rgba(0,0,0,.25); }
+
+/* ───────────────────────── Shared bits ───────────────────────── */
+.sc { position: relative; overflow: clip; }
+.wrap { width: min(1240px, 100% - var(--gutter) * 2); margin-inline: auto; }
+
+.btn {
+  --b: var(--ink);
+  display: inline-flex; align-items: center; gap: .5em;
+  padding: .7em 1.1em;
+  border: 2.5px solid var(--b);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700; font-size: .92em; line-height: 1;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--b);
+  transition: transform .15s var(--ease-out), box-shadow .15s var(--ease-out), background .15s;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--b); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--b); }
+.btn--ink { background: var(--ink); color: var(--paper); --b: var(--ink); box-shadow: 3px 3px 0 var(--yellow); }
+.btn--ink:hover { box-shadow: 5px 5px 0 var(--yellow); }
+.btn--yellow { background: var(--yellow); }
+.btn--sm { font-size: .8em; padding: .55em .9em; }
+
+.chip { display: inline-block; padding: .25em .7em; border: 1.5px solid currentColor; border-radius: 999px; font-family: var(--f-mono); font-size: .72em; letter-spacing: .02em; white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+
+/* Manga narration box */
+.caption-box { display: inline-block; background: var(--paper); color: var(--ink); border: 2.5px solid var(--ink); padding: .45em .8em; font-weight: 700; font-size: .85em; line-height: 1.35; box-shadow: 3px 3px 0 var(--ink); }
+
+/* Fansub-style text (yellow with ink outline) */
+.subtitle-text {
+  font-family: var(--f-body);
+  font-weight: 900;
+  color: var(--yellow);
+  -webkit-text-stroke: 5px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 2px 0 var(--ink);
+  letter-spacing: .01em;
+}
+
+/* Screentone + speed-line textures */
+.tone { background: radial-gradient(circle, currentColor 1.1px, transparent 1.5px) 0 0 / 7px 7px; }
+.speedlines {
+  background: repeating-conic-gradient(from 0deg at 50% 50%, currentColor 0deg .9deg, transparent 1.1deg 5.5deg);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 0 18%, #000 52%);
+          mask: radial-gradient(circle at 50% 50%, transparent 0 18%, #000 52%);
+}
+
+/* ───────────────────────── Episode title card ───────────────────────── */
+.epcard { position: relative; display: grid; justify-items: start; gap: .1em; padding-block: clamp(72px, 12vh, 140px) clamp(28px, 5vh, 56px); }
+.epcard__no { font-family: var(--f-display); font-size: clamp(14px, 1.2vw, 18px); letter-spacing: .14em; background: var(--ink); color: var(--paper); padding: .35em .8em .3em; transform: skewX(-10deg); }
+.epcard__name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(48px, 9vw, 150px); line-height: .92; letter-spacing: -.02em; text-transform: uppercase; }
+.epcard__ml { font-size: clamp(20px, 2.4vw, 34px); font-weight: 700; line-height: 1; opacity: .85; padding-top: .3em; }
+.epcard.on-dark .epcard__no { background: var(--paper); color: var(--ink); }
+.epcard.on-dark { color: var(--paper); }
+
+/* Next-episode teaser */
+.teaser { display: grid; gap: .3em; margin-top: clamp(40px, 8vh, 80px); padding: clamp(18px, 3vw, 28px); border-left: 8px solid var(--accent); background: var(--ink); color: var(--paper); max-width: 760px; transform: skewX(-4deg); }
+.teaser > * { transform: skewX(4deg); }
+.teaser__k { font-family: var(--f-display); font-size: .8em; letter-spacing: .16em; color: var(--yellow); }
+.teaser p { margin: 0; font-size: clamp(18px, 1.6vw, 24px); font-weight: 700; line-height: 1.35; }
+
+/* ───────────────────────── Fansub bar ───────────────────────── */
+.fansub { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 60; width: min(980px, calc(100% - 32px)); text-align: center; pointer-events: none; }
+.fansub__line { margin: 0; font-size: clamp(17px, 1.8vw, 28px); line-height: 1.25; min-height: 1.25em; }
+.fansub__line .c { opacity: 0; }
+.fansub__line .c.on { opacity: 1; }
+html.is-cold .fansub { z-index: 160; }
+
+/* ───────────────────────── Super mode (Konami) ───────────────────────── */
+html.super { --accent: var(--red); }
+html.super body::after {
+  content: ''; position: fixed; inset: 0; z-index: 70; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(229, 50, 45, .45) 100%);
+  mix-blend-mode: multiply;
+  animation: aura 1.2s ease-in-out infinite alternate;
+}
+html.super .epcard__name, html.super .op__name { color: var(--red); }
+@keyframes aura { from { opacity: .55; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}

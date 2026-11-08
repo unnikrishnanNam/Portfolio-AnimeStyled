@@ -1,0 +1,55 @@
+---
+// Full-screen transition layer. fx.js drives these layers.
+import Art from '../Art.astro';
+---
+<div class="fx" id="fx" aria-hidden="true">
+  <div class="fx__tone"></div>
+  <div class="fx__lines speedlines"></div>
+  <div class="fx__flash"></div>
+  <div class="fx__slash">
+    <i></i><i></i><i></i>
+  </div>
+  <div class="fx__eye">
+    <div class="fx__eyecard">
+      <div class="fx__eyeart" data-ec="1"><Art id="EC-01" fallback={['MUF-03', 'MUF-01']} sizes="60vw" eager fetchpriority="low" /></div>
+      <div class="fx__eyeart" data-ec="2" hidden><Art id="EC-02" fallback={['MUF-02', 'MUF-01']} sizes="60vw" eager fetchpriority="low" /></div>
+      <div class="fx__eyeart" data-ec="3" hidden><Art id="EC-03" fallback={['MUF-01']} sizes="60vw" eager fetchpriority="low" /></div>
+      <p class="fx__logo"><span>Debug,</span> <span>Deploy,</span> <span>Adventure,</span> <span>Repeat</span></p>
+      <p class="fx__eyelabel">EYECATCH</p>
+    </div>
+  </div>
+  <div class="fx__power">
+    <div class="fx__aura"></div>
+    <div class="fx__rage"><Art id="R-02" sizes="60vw" eager fetchpriority="low" /></div>
+  </div>
+  <div class="fx__fade"></div>
+</div>
+
+<style is:global>
+  .fx { position: fixed; inset: 0; z-index: 150; pointer-events: none; }
+  .fx.is-active { pointer-events: auto; }
+  .fx > * { position: absolute; inset: 0; visibility: hidden; }
+  .fx__tone { --r: 0px; background: radial-gradient(circle, var(--ink) var(--r), transparent calc(var(--r) + .6px)) 50% 50% / 28px 28px; }
+  .fx__lines { color: var(--ink); background-color: transparent; }
+  .fx__flash { background: #fff; mix-blend-mode: difference; }
+  .fx__slash i { position: absolute; left: -10%; width: 120%; height: 40%; background: var(--ink); border-block: 6px solid var(--paper); transform: skewY(-8deg); }
+  .fx__slash i:nth-child(1) { top: -6%; }
+  .fx__slash i:nth-child(2) { top: 30%; background: var(--red); }
+  .fx__slash i:nth-child(3) { top: 66%; }
+  .fx__eye { display: grid; place-items: center; background: var(--yellow); perspective: 1200px; }
+  .fx__eye::before { content: ''; position: absolute; inset: 0; color: rgba(22,19,28,.12); background: radial-gradient(circle, currentColor 2px, transparent 2.6px) 0 0 / 22px 22px; }
+  .fx__eyecard { position: relative; width: min(880px, 88vw); aspect-ratio: 16 / 9; display: grid; place-items: center; background: var(--paper); border: 6px solid var(--ink); border-radius: 28px; box-shadow: 14px 14px 0 var(--ink); overflow: hidden; }
+  .fx__eyeart { position: absolute; inset: 6% 6% 18% 40%; }
+  .fx__eyeart .art, .fx__eyeart img { width: 100%; height: 100%; }
+  .fx__eyeart img { object-fit: contain; }
+  .fx__logo { position: absolute; left: 6%; top: 50%; transform: translateY(-50%) rotate(-4deg); margin: 0; display: grid; font-family: var(--f-display); font-size: clamp(22px, 4.4vw, 54px); line-height: .98; text-transform: uppercase; }
+  .fx__logo span:nth-child(2) { color: var(--sky); }
+  .fx__logo span:nth-child(3) { color: var(--red); }
+  .fx__logo span:nth-child(4) { -webkit-text-stroke: 2px var(--ink); color: var(--yellow); paint-order: stroke fill; }
+  .fx__eyelabel { position: absolute; right: 4%; bottom: 3%; margin: 0; font-family: var(--f-display); letter-spacing: .3em; font-size: clamp(11px, 1.2vw, 15px); }
+  .fx__power { display: grid; place-items: center; overflow: hidden; }
+  .fx__aura { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #fff2 0, var(--red) 30%, #7a0d0a 75%); clip-path: circle(0% at 50% 50%); }
+  .fx__rage { position: relative; width: min(560px, 70vw); border: 5px solid var(--ink); border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 6px var(--red), 0 0 80px 20px rgba(255, 60, 40, .7); }
+  .fx__rage img { width: 100%; height: auto; }
+  .fx__fade { background: var(--ink); }
+</style>

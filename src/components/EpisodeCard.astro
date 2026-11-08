@@ -1,0 +1,11 @@
+---
+import { episodes } from '../data/content.js';
+interface Props { ep: string; dark?: boolean; heading?: string }
+const { ep, dark = false, heading } = Astro.props;
+const e = episodes.find((x) => x.id === ep)!;
+---
+<header class:list={['epcard', { 'on-dark': dark }]} data-epcard>
+  <span class="epcard__no">EP.{e.n}</span>
+  <h2 class="epcard__name">{heading || e.name}</h2>
+  {e.ml && <span class="epcard__ml" lang="ml">{e.ml}</span>}
+</header>

@@ -1,0 +1,54 @@
+---
+// Renders a pipeline asset by ID (see scripts/media.mjs).
+// - Stills: <picture> with AVIF + WebP srcsets, optional 9:16 variant for portrait screens.
+// - Loops: animated WebP, swapped for the poster frame under reduced motion.
+// - Missing: tries `fallback`, then shows a labelled placeholder in dev (nothing in production).
+import media from '../data/media.json';
+
+interface Props {
+  id: string;
+  alt?: string;
+  class?: string;
+  sizes?: string;
+  eager?: boolean;
+  fallback?: string | string[];
+  label?: string;
+  style?: string;
+  ratio?: string;
+  [key: string]: any;
+}
+const { id, alt = '', class: cls = '', sizes = '100vw', eager = false, fallback, label, style = '', ratio, ...rest } = Astro.props;
+const lib = media as Record<string, any>;
+const chain = [id, ...(Array.isArray(fallback) ? fallback : fallback ? [fallback] : [])];
+const useId = chain.find((k) => lib[k]);
+const m = useId ? lib[useId] : null;
+const p = useId ? lib[useId + '@p'] : null;
+const srcset = (e: any, fmt: string) => e.widths.map((w: number) => `${e.base}-${w}.${fmt} ${w}w`).join(', ');
+const largest = (e: any) => `${e.base}-${Math.max(...e.widths)}.webp`;
+const loading = eager ? 'eager' : 'lazy';
+const showPlaceholder = import.meta.env.DEV;
+const aspect = ratio || (m && m.w && m.h ? `${m.w} / ${m.h}` : undefined);
+---
+{m && m.kind === 'still' && (
+  <picture class:list={['art', cls]} data-art={useId} data-want={id !== useId ? id : undefined} style={style}>
+    {p && <source media="(max-aspect-ratio: 3/4)" type="image/avif" srcset={srcset(p, 'avif')} sizes={sizes} />}
+    {p && <source media="(max-aspect-ratio: 3/4)" type="image/webp" srcset={srcset(p, 'webp')} sizes={sizes} />}
+    <source type="image/avif" srcset={srcset(m, 'avif')} sizes={sizes} />
+    <source type="image/webp" srcset={srcset(m, 'webp')} sizes={sizes} />
+    <img src={largest(m)} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" fetchpriority={eager ? 'high' : 'auto'} draggable="false" {...rest} />
+  </picture>
+)}
+{m && m.kind === 'anim' && (
+  <picture class:list={['art', 'art--anim', cls]} data-art={useId} data-want={id !== useId ? id : undefined} style={style}>
+    <source media="(prefers-reduced-motion: reduce)" srcset={m.poster} />
+    <img src={m.src} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" draggable="false" data-poster={m.poster} {...rest} />
+  </picture>
+)}
+{m && m.kind === 'video' && (
+  <video class:list={['art', cls]} data-art={useId} src={m.src} autoplay muted loop playsinline style={style} aria-label={alt}></video>
+)}
+{!m && showPlaceholder && (
+  <div class:list={['art', 'art--todo', cls]} data-todo={id} style={`${aspect ? `aspect-ratio:${aspect};` : ''}${style}`} role="img" aria-label={alt}>
+    <span><b>{id}</b>{label && <em>{label}</em>}</span>
+  </div>
+)}

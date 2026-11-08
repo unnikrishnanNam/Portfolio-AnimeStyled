@@ -1,0 +1,80 @@
+---
+import Art from '../Art.astro';
+import media from '../../data/media.json';
+import { reactions } from '../../data/content.js';
+const lib = media as Record<string, any>;
+---
+<section class="sc react" id="reactions" data-ep="ep05" data-fx="screentone" aria-labelledby="react-h">
+  <div class="wrap react__grid">
+    <div class="react__copy">
+      <p class="react__k mono">REACTION CORNER</p>
+      <h2 class="react__h" id="react-h">How do you want to react?</h2>
+      <p class="react__sub">Pick a reaction for our hero. Or skip straight to the important button.</p>
+      <div class="react__btns" role="group" aria-label="Reactions">
+        {reactions.map((r, i) => (
+          <button class="react__btn" type="button" data-react={r.id} aria-pressed={i === 0 ? 'true' : 'false'} data-has={lib[r.id] ? '1' : '0'}>
+            <span aria-hidden="true">{r.emoji}</span>{r.label}
+          </button>
+        ))}
+      </div>
+      <button class="btn btn--ink react__pet" type="button" data-pet>Pet Muffins 🐾</button>
+      <p class="react__count mono" aria-live="polite"></p>
+    </div>
+
+    <div class="tv">
+      <div class="tv__screen">
+        {reactions.map((r, i) => (
+          <div class:list={['tv__ch', { 'is-on': i === 0 }]} data-ch={r.id}>
+            {lib[r.id] ? <Art id={r.id} sizes="(max-width: 900px) 90vw, 46vw" alt={`Our hero, ${r.label.toLowerCase()}`} /> : <span class="tv__static"><b class="mono">CH {r.id}</b><em>not filmed yet</em></span>}
+          </div>
+        ))}
+        <div class="tv__ch" data-ch="pet">
+          <Art id="GIF-08" fallback="MUF-01" sizes="(max-width: 900px) 90vw, 46vw" alt="Muffins wiggling happily while being petted" />
+          <span class="tv__hearts" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="tv__base mono"><span>CH</span><b data-tv-label>R-01</b><i></i><i></i></div>
+    </div>
+  </div>
+  <div class="react__sunset" aria-hidden="true"></div>
+</section>
+
+<style is:global>
+  .react { background: var(--yellow); color: var(--ink); padding-top: clamp(90px, 14vh, 160px); --accent: var(--red); }
+  .react::before { content: ''; position: absolute; inset: 0; color: rgba(22, 19, 28, .1); background: radial-gradient(circle, currentColor 1.6px, transparent 2px) 0 0 / 16px 16px; pointer-events: none; }
+  .react__grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(30px, 5vw, 70px); align-items: center; }
+  .react__k { margin: 0 0 10px; font-size: 12px; letter-spacing: .25em; }
+  .react__h { margin: 0 0 12px; font-family: var(--f-display); font-weight: 400; font-size: clamp(38px, 5.6vw, 88px); line-height: .95; }
+  .react__sub { margin: 0 0 24px; font-weight: 700; }
+  .react__btns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .react__btn { display: grid; justify-items: center; gap: 2px; padding: 12px 6px; border: 2.5px solid var(--ink); border-radius: 14px; background: var(--paper); box-shadow: 3px 3px 0 var(--ink); font-weight: 700; font-size: 13px; transition: transform .15s var(--ease-out), box-shadow .15s, background .15s; }
+  .react__btn span { font-size: 28px; line-height: 1.1; }
+  .react__btn:hover { transform: translate(-2px, -2px) rotate(-2deg); box-shadow: 5px 5px 0 var(--ink); }
+  .react__btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .react__btn[data-has="0"] { opacity: .75; }
+  .react__pet { font-size: 1.05em; }
+  .react__count { min-height: 1.5em; margin: 12px 0 0; font-size: 12.5px; }
+
+  .tv { position: relative; padding: 18px 18px 0; border: 4px solid var(--ink); border-radius: 34px; background: linear-gradient(160deg, #e9542c, #b8311c); box-shadow: 10px 10px 0 var(--ink); }
+  .tv__screen { position: relative; aspect-ratio: 9 / 8; border: 4px solid var(--ink); border-radius: 26px / 30px; overflow: hidden; background: #111; }
+  .tv__screen::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .14) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0, 0, 0, .45)); }
+  .tv__ch { position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+  .tv__ch.is-on { opacity: 1; visibility: visible; }
+  .tv__ch .art, .tv__ch img { width: 100%; height: 100%; }
+  .tv__ch img { object-fit: cover; }
+  .tv__ch[data-ch="pet"] { background: #fff2c9; }
+  .tv__ch[data-ch="pet"] img { object-fit: contain; padding: 6%; }
+  .tv__ch[data-ch="pet"].is-on .art { animation: wiggle .35s ease-in-out infinite alternate; }
+  @keyframes wiggle { from { transform: rotate(-3deg) scale(1); } to { transform: rotate(3deg) scale(1.03); } }
+  .tv__static { position: absolute; inset: 0; display: grid; place-content: center; gap: 6px; text-align: center; color: #fff; background: repeating-radial-gradient(circle at 30% 40%, #999 0 1px, #222 1px 2px, #555 2px 3px); animation: static .2s steps(3) infinite; }
+  .tv__static b { font-size: 14px; background: #000; padding: 4px 8px; }
+  .tv__static em { font-style: normal; background: #000; padding: 2px 8px; font-size: 13px; }
+  @keyframes static { 33% { background-position: 3px 1px; } 66% { background-position: -2px 2px; } }
+  .tv__hearts { position: absolute; inset: 0; pointer-events: none; }
+  .tv__heart { position: absolute; font-size: 28px; }
+  .tv__base { display: flex; align-items: center; gap: 8px; padding: 12px 8px 14px; color: var(--paper); font-size: 12px; }
+  .tv__base b { color: var(--yellow); margin-right: auto; }
+  .tv__base i { width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--ink); background: #f0c7a0; }
+  .react__sunset { position: relative; height: 50vh; margin-top: clamp(60px, 10vh, 120px); background: linear-gradient(180deg, var(--yellow), #ffb347 30%, #ff7a59 60%, #a65cc7 100%); }
+  @media (max-width: 900px) { .react__grid { grid-template-columns: 1fr; } .tv { order: -1; } }
+</style>

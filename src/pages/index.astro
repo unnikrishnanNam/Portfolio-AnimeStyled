@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Fx from '../components/ui/Fx.astro';
+import Notch from '../components/ui/Notch.astro';
+import Palette from '../components/ui/Palette.astro';
+import Extras from '../components/ui/Extras.astro';
+import ColdOpen from '../components/sections/ColdOpen.astro';
+import Op from '../components/sections/Op.astro';
+import Origin from '../components/sections/Origin.astro';
+import Training from '../components/sections/Training.astro';
+import Battle from '../components/sections/Battle.astro';
+import Journey from '../components/sections/Journey.astro';
+import SliceOfLife from '../components/sections/SliceOfLife.astro';
+import Reactions from '../components/sections/Reactions.astro';
+import Finale from '../components/sections/Finale.astro';
+import Credits from '../components/sections/Credits.astro';
+---
+<Base
+  title="Unnikrishnan Namboothiri · Debug, Deploy, Adventure, Repeat"
+  description="Platform / cloud-native engineer from Kerala (CKA). A portfolio told as a 90s anime series: four boss battles, a Shih Tzu named Muffins, and a stone wheel that keeps time."
+>
+  <ColdOpen />
+  <Notch />
+  <main id="top">
+    <Op />
+    <Origin />
+    <Training />
+    <Battle />
+    <Journey />
+    <SliceOfLife />
+    <Reactions />
+    <Finale />
+    <Credits />
+  </main>
+  <Extras />
+  <Palette />
+  <Fx />
+  <script>
+    import '../scripts/main.js';
+  </script>
+</Base>

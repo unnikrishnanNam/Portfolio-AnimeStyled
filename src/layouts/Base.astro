@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const og = new URL('/media/BG-07-1664.webp', Astro.site).toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#16131c" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={Astro.site} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={og} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2:wght@600;800&family=Dela+Gothic+One&family=JetBrains+Mono:wght@400;700&family=Yuji+Syuku&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" />
+    <script is:inline>
+      // Set flags before paint: returning visitors skip the cold open.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try { if (localStorage.getItem('ddar-seen')) d.classList.add('is-returning'); } catch (e) {}
+        try { if (localStorage.getItem('ddar-sfx') === 'on') d.classList.add('sfx-on'); } catch (e) {}
+        if (!d.classList.contains('is-returning')) d.classList.add('is-cold');
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#ep01">Skip to the story</a>
+    <slot />
+  </body>
+</html>

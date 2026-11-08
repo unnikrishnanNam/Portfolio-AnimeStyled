@@ -1,0 +1,126 @@
+---
+import Art from '../Art.astro';
+import EpisodeCard from '../EpisodeCard.astro';
+import media from '../../data/media.json';
+import { chapters, tiles } from '../../data/content.js';
+
+// Flag positions along the 4-tile track (0..1). Chapters sharing a tile spread out inside it.
+const perTile = tiles.map((_, t) => chapters.filter((c) => c.tile === t).length);
+const seen = tiles.map(() => 0);
+const flags = chapters.map((c) => {
+  const k = seen[c.tile]++;
+  const sub = (k + 1) / (perTile[c.tile] + 1);
+  return (c.tile + sub) / tiles.length;
+});
+const walk = (media as Record<string, any>)['GIF-04'];
+---
+<section class="sc journey" id="ep04" data-ep="ep04" data-fx="slash" aria-labelledby="journey-h">
+  <div class="wrap journey__intro">
+    <EpisodeCard ep="ep04" />
+    <p class="journey__lede" id="journey-h">Eight chapters, from Kottayam to Dehradun and back to Kochi. The stone wheel keeps time: scroll to turn it.</p>
+  </div>
+
+  <div class="journey__pin" data-flags={JSON.stringify(flags)} data-fansub="New town. New stack. Same green hoodie.">
+    <div class="journey__track">
+      {tiles.map((t, i) => (
+        <div class="tile" style={`--tint:${t.tint}`} data-tile={i}>
+          <Art id={t.art} sizes="100vw" alt={t.name} label={t.name} />
+          <span class="tile__name mono">{t.name}</span>
+          {i === 3 && <div class="tile__stand"><Art id="CH-06" sizes="22vw" alt="Our hero in a navy suit and lanyard at ICACSDF" label="suit + lanyard at ICACSDF" /></div>}
+        </div>
+      ))}
+      {chapters.map((c, i) => (
+        <button class="flag" type="button" style={`--x:${flags[i]}`} data-flag={i} aria-label={`Chapter ${i + 1}: ${c.title}`}>
+          <span class="flag__pole"></span><span class="flag__cloth mono">{i + 1}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="journey__walker" aria-hidden="true">
+      {walk && walk.kind === 'anim'
+        ? <div class="walker" style={`background-image:url(${walk.strip});aspect-ratio:${walk.w}/${walk.h}`} data-frames={walk.frames}></div>
+        : <Art id="GIF-04" fallback="CH-01" sizes="20vw" alt="" label="walk cycle" />}
+    </div>
+    <div class="journey__drone" aria-hidden="true"><Art id="DRONE-01" sizes="120px" alt="" label="drone" /></div>
+
+    <div class="journey__hud">
+      <ol class="chapters">
+        {chapters.map((c, i) => (
+          <li class:list={['chapter', { 'is-on': i === 0 }]} data-chapter={i}>
+            <p class="chapter__when mono">Chapter {i + 1} of 8 · {c.when}</p>
+            <h3 class="chapter__title">{c.title}</h3>
+            <p class="chapter__text">{c.text}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="wheel">
+        <div class="wheel__rot"><Art id="WHEEL-01" sizes="(max-width: 900px) 40vw, 30vh" alt="A carved stone chariot wheel with eight spokes, one per chapter" /></div>
+        <i class="wheel__pin" aria-hidden="true"></i>
+        <span class="wheel__n mono" aria-hidden="true"><b>1</b>/8</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .journey { background: #cfe8f7; color: var(--ink); --accent: var(--stone); }
+  .journey__intro { padding-bottom: 30px; }
+  .journey__lede { margin: 0; max-width: 48ch; font-size: clamp(18px, 1.6vw, 24px); font-weight: 700; }
+  .journey__pin { position: relative; padding: 30px 0 120px; }
+
+  /* Vertical (default / mobile / reduced motion) */
+  .journey__track { display: grid; gap: 14px; width: min(1240px, 100% - var(--gutter) * 2); margin: 0 auto 30px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile { position: relative; aspect-ratio: 16 / 9; border: 3px solid var(--ink); border-radius: 14px; overflow: hidden; background: linear-gradient(180deg, #bfe3ff, var(--tint)); }
+  .tile .art, .tile img { width: 100%; height: 100%; }
+  .tile img { object-fit: cover; }
+  .tile .art--todo { border: 0; border-radius: 0; color: rgba(255, 255, 255, .8); background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%), radial-gradient(circle, rgba(255,255,255,.25) 1px, transparent 1.4px) 0 0 / 9px 9px; }
+  .tile__name { position: absolute; left: 10px; bottom: 10px; padding: 4px 8px; border-radius: 6px; background: var(--ink); color: var(--paper); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .tile__stand { position: absolute; right: 8%; bottom: 6%; width: 22%; aspect-ratio: 3 / 4; }
+  .tile__stand .art--todo { height: 100%; min-height: 0; font-size: 10px; }
+  .tile__stand img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
+  .flag, .journey__walker, .journey__drone { display: none; }
+  .journey__hud { width: min(1240px, 100% - var(--gutter) * 2); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: start; }
+  .chapters { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .chapter { padding: 16px 18px; border: 2.5px solid var(--ink); border-radius: 14px; background: var(--paper); box-shadow: 4px 4px 0 var(--ink); transition: box-shadow .3s, transform .3s var(--ease-out); }
+  .chapter.is-on { box-shadow: 6px 6px 0 var(--red); transform: translate(-2px, -2px); }
+  .chapter__when { margin: 0 0 4px; font-size: 11.5px; letter-spacing: .1em; color: #8a5a2b; }
+  .chapter__title { margin: 0 0 6px; font-family: var(--f-display); font-weight: 400; font-size: clamp(19px, 1.8vw, 26px); line-height: 1.15; }
+  .chapter__text { margin: 0; font-size: 15px; line-height: 1.5; }
+  .wheel { position: sticky; top: 70px; width: clamp(140px, 26vw, 300px); aspect-ratio: 1; }
+  .wheel__rot { width: 100%; height: 100%; will-change: transform; }
+  .wheel__rot .art, .wheel__rot img { width: 100%; height: 100%; }
+  .wheel__rot img { filter: drop-shadow(0 8px 0 rgba(22, 19, 28, .35)); }
+  .wheel__pin { position: absolute; left: 50%; top: -6px; width: 18px; height: 26px; margin-left: -9px; background: var(--red); clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 100%, 0 60%); filter: drop-shadow(0 2px 0 var(--ink)); }
+  .wheel__n { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 4px 8px; border-radius: 99px; background: var(--ink); color: var(--paper); font-size: 12px; }
+  .wheel__n b { color: var(--yellow); }
+
+  /* Horizontal mode (desktop, set by journey.js) */
+  .journey.is-h .journey__pin { height: 100vh; padding: 0; overflow: hidden; }
+  .journey.is-h .journey__track { position: absolute; left: 0; top: 0; display: flex; gap: 0; width: 400vw; height: 100%; margin: 0; }
+  .journey.is-h .tile { flex: 0 0 100vw; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; }
+  .journey.is-h .tile + .tile { box-shadow: -1px 0 0 rgba(22, 19, 28, .2); }
+  .journey.is-h .tile__name { left: 24px; bottom: auto; top: 76px; }
+  .journey.is-h .tile__stand { right: 30%; bottom: 14%; width: min(18vw, 260px); }
+  .journey.is-h .flag { display: block; position: absolute; left: calc(var(--x) * 100%); bottom: 12vh; width: 34px; height: 120px; margin-left: -17px; padding: 0; border: 0; background: none; }
+  .flag__pole { position: absolute; left: 50%; bottom: 0; width: 3px; height: 100%; background: var(--ink); }
+  .flag__cloth { position: absolute; left: 50%; top: 0; padding: 4px 10px 4px 8px; background: var(--paper); border: 2px solid var(--ink); font-size: 12px; font-weight: 700; clip-path: polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%); transition: background .2s; }
+  .flag.is-passed .flag__cloth { background: var(--red); color: #fff; }
+  .journey.is-h .journey__walker { display: block; position: absolute; left: 22vw; bottom: 9vh; z-index: 3; height: min(42vh, 420px); aspect-ratio: 1; }
+  .journey__walker .art, .journey__walker img { width: 100%; height: 100%; }
+  .journey__walker img { object-fit: contain; object-position: bottom; }
+  .walker { height: 100%; background-size: 100% auto; background-repeat: no-repeat; }
+  .journey.is-h .journey__drone { display: block; position: absolute; left: 30vw; top: 18vh; z-index: 3; width: 96px; animation: hover 2.4s ease-in-out infinite; }
+  .journey__drone .art--todo { aspect-ratio: 1; min-height: 0; font-size: 10px; }
+  @keyframes hover { 50% { transform: translateY(-12px) rotate(3deg); } }
+  .journey.is-h .journey__hud { position: absolute; right: var(--gutter); top: 70px; bottom: 36px; z-index: 4; width: min(420px, 34vw); margin: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; justify-items: end; align-items: end; gap: 16px; }
+  .journey.is-h .chapters { position: relative; width: 100%; display: grid; }
+  .journey.is-h .chapter { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .35s, transform .35s var(--ease-out), visibility .35s; }
+  .journey.is-h .chapter.is-on { opacity: 1; visibility: visible; transform: none; }
+  .journey.is-h .wheel { position: relative; top: auto; width: min(34vh, 300px); }
+
+  @media (max-width: 760px) {
+    .journey__track { grid-template-columns: 1fr; }
+    .journey__hud { grid-template-columns: 1fr; }
+    .wheel { order: -1; top: 56px; justify-self: end; width: 120px; z-index: 5; }
+  }
+</style>

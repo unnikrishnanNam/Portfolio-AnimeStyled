@@ -1,0 +1,39 @@
+---
+import Art from '../Art.astro';
+---
+<div class="cold on-dark" id="cold" role="dialog" aria-modal="true" aria-label="Episode 0, cold open. Loading.">
+  <div class="cold__bg"><Art id="BG-03" eager sizes="100vw" alt="" /></div>
+  <div class="cold__scene">
+    <div class="cold__sleep"><Art id="GIF-01" eager sizes="(max-width: 800px) 100vw, 70vw" alt="Our hero asleep at the MacBook" label="asleep at the MacBook" /></div>
+    <div class="cold__wake" hidden><Art id="GIF-02" sizes="(max-width: 800px) 100vw, 70vw" alt="Muffins licks our hero awake" label="Muffins wakes our hero" /></div>
+  </div>
+  <div class="cold__dog"><Art id="MUF-01" eager sizes="240px" alt="Muffins, peeking over the desk" /></div>
+  <div class="cold__hud">
+    <p class="cold__zzz" aria-hidden="true"><span class="cold__z">Z</span><span class="cold__z">z</span><span class="cold__z">z</span>… <b id="cold-pct">0%</b></p>
+    <p class="cold__ep mono"><span data-cold-who>EP.00 · COLD OPEN</span></p>
+  </div>
+  <button class="cold__skip btn btn--sm" type="button" id="cold-skip">Skip intro ›</button>
+</div>
+
+<style is:global>
+  .cold { position: fixed; inset: 0; z-index: 140; display: none; overflow: hidden; background: var(--night); color: var(--paper); }
+  html.js.is-cold .cold { display: block; }
+  .cold__bg, .cold__bg .art, .cold__bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cold__bg img { object-fit: cover; filter: saturate(.9) brightness(.85); }
+  .cold__bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 38%, transparent 30%, rgba(5, 6, 18, .75) 100%); }
+  .cold__scene, .cold__scene > div, .cold__scene .art { position: absolute; inset: 0; }
+  .cold__scene img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+  .cold__scene .art--todo { inset: auto; left: 50%; top: 50%; width: min(640px, 80vw); aspect-ratio: 4 / 3; transform: translate(-50%, -50%); }
+  .cold__scene::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(5, 6, 18, .7) 100%); pointer-events: none; }
+  .cold__dog { position: absolute; left: 50%; bottom: 0; width: clamp(120px, 15vw, 210px); transform: translate(70%, 62%); filter: drop-shadow(0 0 18px rgba(80, 120, 255, .35)); }
+  .cold__dog img { width: 100%; height: auto; }
+  .cold__hud { position: absolute; left: var(--gutter); top: var(--gutter); display: grid; gap: 4px; }
+  .cold__zzz { margin: 0; font-family: var(--f-display); font-size: clamp(34px, 5vw, 64px); line-height: 1; color: #cfe0ff; text-shadow: 0 0 24px rgba(120, 160, 255, .55); }
+  .cold__zzz b { font-weight: 400; color: var(--yellow); }
+  .cold__z { display: inline-block; animation: zz 1.8s ease-in-out infinite; }
+  .cold__z:nth-child(2) { animation-delay: .2s; font-size: .8em; }
+  .cold__z:nth-child(3) { animation-delay: .4s; font-size: .62em; }
+  @keyframes zz { 0%, 100% { transform: translateY(0); opacity: .6; } 50% { transform: translateY(-8px); opacity: 1; } }
+  .cold__ep { margin: 0; font-size: 12px; letter-spacing: .2em; opacity: .7; }
+  .cold__skip { position: absolute; right: var(--gutter); top: var(--gutter); background: rgba(251, 248, 241, .92); }
+</style>

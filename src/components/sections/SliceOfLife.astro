@@ -1,0 +1,113 @@
+---
+import Art from '../Art.astro';
+import EpisodeCard from '../EpisodeCard.astro';
+import { photos, inProduction } from '../../data/content.js';
+const tilt = [-7, 5, -3, 8];
+---
+<section class="sc slice" id="ep05" data-ep="ep05" data-fx="eyecatch" data-ec="2" aria-labelledby="slice-h">
+  <div class="wrap">
+    <EpisodeCard ep="ep05" dark />
+    <p class="slice__lede" id="slice-h">After hours: drone shots, hikes, side projects, and a Shih Tzu who takes her job very seriously. Drag the polaroids around and click them to flip.</p>
+  </div>
+  <div class="desk" data-fansub="Off duty. Muffins is still on duty.">
+    {photos.map((p, i) => (
+      <button class={`polaroid polaroid--${i + 1}`} type="button" style={`--t:${tilt[i]}deg`} aria-pressed="false" aria-label={`Photo: ${p.caption} Click to flip.`}>
+        <span class="polaroid__inner">
+          <span class="polaroid__front"><Art id={p.art} sizes="260px" alt="" label="your photo, restyled" /></span>
+          <span class="polaroid__back">{p.caption}</span>
+        </span>
+      </button>
+    ))}
+
+    <div class="laptop" aria-label="MacBook Pro lid covered in stickers">
+      <span class="laptop__notch"></span>
+      <span class="sticker s1" title="Kubernetes">⎈</span>
+      <span class="sticker s2" title="PostgreSQL">🐘</span>
+      <span class="sticker s3" title="Linux">🐧</span>
+      <span class="sticker s4" title="Java">☕</span>
+      <span class="sticker s5" title="Muffins">🐾</span>
+      <span class="sticker s6 mono" title="GlassNotch">glass<br />notch</span>
+    </div>
+
+    <div class="note note--prod">
+      <p class="note__k mono">IN PRODUCTION</p>
+      <ul>{inProduction.map((x) => <li>{x}</li>)}</ul>
+    </div>
+    <div class="note note--biz">
+      <p class="note__k mono">READING LIST</p>
+      <p>The Indian business ecosystem. Long-term goal: an infrastructure company.</p>
+    </div>
+    <div class="mug" aria-label="Mug that says keep building"><span>KEEP<br />BUILDING</span></div>
+
+    <button class="bed" type="button" aria-label="Muffins, asleep in her blue bean bag. Click to wake her.">
+      <span class="bed__bag"></span>
+      <span class="bed__dog bed__dog--sleep"><Art id="MUF-02" fallback="MUF-01" sizes="260px" alt="" /></span>
+      <span class="bed__dog bed__dog--awake"><Art id="MUF-01" sizes="260px" alt="" /></span>
+      <span class="bed__z mono" aria-hidden="true">z<b>z</b><i>z</i></span>
+      <span class="bed__count mono" aria-live="polite"></span>
+    </button>
+  </div>
+</section>
+
+<style is:global>
+  .slice { --wood: #6b4528; background: #3b2516; color: var(--paper); padding-bottom: clamp(80px, 14vh, 160px); --accent: var(--gold); }
+  .slice::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      repeating-linear-gradient(92deg, rgba(0,0,0,.08) 0 2px, transparent 2px 38px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 9px),
+      linear-gradient(180deg, #4a2f1c, #6b4528 30%, #5b3a22 70%, #3b2516); }
+  .slice .wrap { position: relative; }
+  .slice__lede { margin: 0 0 30px; max-width: 52ch; font-size: clamp(17px, 1.5vw, 22px); font-weight: 700; }
+
+  .desk { position: relative; width: min(1240px, 100% - var(--gutter) * 2); margin: 0 auto; aspect-ratio: 16 / 9.5; }
+  .desk > * { position: absolute; }
+  .polaroid { width: clamp(150px, 17%, 230px); aspect-ratio: 5 / 6; padding: 0; border: 0; background: none; perspective: 900px; transform: rotate(var(--t)); touch-action: none; z-index: 3; }
+  .polaroid--1 { left: 2%; top: 4%; } .polaroid--2 { left: 21%; top: 40%; } .polaroid--3 { left: 64%; top: 2%; } .polaroid--4 { left: 80%; top: 44%; }
+  .polaroid__inner { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .6s var(--ease-out); }
+  .polaroid[aria-pressed="true"] .polaroid__inner { transform: rotateY(180deg); }
+  .polaroid__front, .polaroid__back { position: absolute; inset: 0; backface-visibility: hidden; background: #fbf9f4; box-shadow: 0 10px 24px rgba(0, 0, 0, .45); padding: 8% 8% 26%; }
+  .polaroid__front .art, .polaroid__front img { width: 100%; height: 100%; }
+  .polaroid__front img { object-fit: cover; }
+  .polaroid__front .art--todo { min-height: 0; border-radius: 2px; font-size: 10px; }
+  .polaroid__back { transform: rotateY(180deg); display: grid; place-items: center; padding: 12%; color: var(--ink); font-family: var(--f-body); font-weight: 700; font-size: clamp(12px, 1.1vw, 15px); line-height: 1.35; text-align: center; }
+  .polaroid:active { cursor: grabbing; }
+
+  .laptop { left: 36%; top: 6%; width: 27%; aspect-ratio: 1.45; border-radius: 16px; background: linear-gradient(145deg, #8b8f97, #5d6168); box-shadow: inset 0 0 0 2px #a9adb5, 0 14px 30px rgba(0, 0, 0, .45); z-index: 2; }
+  .laptop__notch { position: absolute; left: 50%; top: 0; width: 18%; height: 4%; transform: translateX(-50%); border-radius: 0 0 6px 6px; background: rgba(0,0,0,.25); }
+  .sticker { position: absolute; display: grid; place-items: center; width: 22%; aspect-ratio: 1; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 rgba(0, 0, 0, .25); font-size: clamp(18px, 2.2vw, 32px); line-height: 1; color: #326ce5; }
+  .s1 { left: 10%; top: 14%; } .s2 { left: 40%; top: 30%; transform: rotate(10deg); background: #e8f0fb; } .s3 { left: 70%; top: 12%; background: #fff6d6; } .s4 { left: 16%; top: 58%; transform: rotate(-12deg); background: #fde7d9; } .s5 { left: 66%; top: 56%; background: var(--yellow); } .s6 { left: 42%; top: 66%; width: 18%; border-radius: 10px; background: #111; color: #fff; font-size: clamp(8px, .8vw, 11px); text-align: center; line-height: 1.1; }
+
+  .note { width: clamp(150px, 17%, 220px); padding: 14px 14px 18px; color: var(--ink); box-shadow: 0 8px 18px rgba(0, 0, 0, .35); z-index: 2; }
+  .note--prod { left: 40%; top: 66%; background: #ffe680; transform: rotate(-3deg); }
+  .note--biz { left: 61%; top: 62%; background: #a8e6cf; transform: rotate(4deg); }
+  .note__k { margin: 0 0 6px; font-size: 10.5px; letter-spacing: .16em; }
+  .note ul { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.4; font-weight: 700; }
+  .note p:not(.note__k) { margin: 0; font-size: 13px; line-height: 1.4; font-weight: 700; }
+  .mug { left: 6%; top: 66%; display: grid; place-items: center; width: clamp(80px, 9%, 120px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #3a2116 0 52%, #f4efe6 53% 100%); box-shadow: 0 8px 18px rgba(0, 0, 0, .4), 18px 0 0 -6px #f4efe6; color: transparent; }
+  .mug span { position: absolute; bottom: -26px; color: var(--paper); font-family: var(--f-display); font-size: 10px; letter-spacing: .1em; text-align: center; line-height: 1.1; opacity: .7; }
+
+  .bed { right: -1%; bottom: -8%; width: 22%; aspect-ratio: 1; padding: 0; border: 0; background: none; z-index: 2; }
+  .bed__bag { position: absolute; inset: 12% 0 0; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #2f62d9 0 48%, #1b1b22 50% 100%); box-shadow: 0 12px 24px rgba(0, 0, 0, .5); }
+  .bed__dog { position: absolute; inset: 0 12% 12%; transition: opacity .3s, transform .4s var(--ease-out); }
+  .bed__dog .art, .bed__dog img { width: 100%; height: 100%; }
+  .bed__dog img { object-fit: contain; }
+  .bed__dog--sleep img { filter: brightness(.95); }
+  .bed:not(.is-awake) .bed__dog--sleep:has([data-want]) { transform: rotate(-80deg) scale(.82) translate(-6%, 6%); }
+  .bed__dog--awake { opacity: 0; transform: translateY(10%) scale(.9); }
+  .bed.is-awake .bed__dog--awake { opacity: 1; transform: translateY(-14%) scale(1.06); }
+  .bed.is-awake .bed__dog--sleep, .bed.is-awake .bed__z { opacity: 0; }
+  .bed__z { position: absolute; right: 6%; top: -4%; font-family: var(--f-display); font-size: 22px; color: #cfe0ff; }
+  .bed__z b, .bed__z i { font-weight: 400; font-style: normal; display: inline-block; animation: zz 1.8s ease-in-out infinite; }
+  .bed__z i { animation-delay: .3s; font-size: .8em; }
+  .bed__count { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; color: var(--yellow); }
+
+  @media (max-width: 900px) {
+    .desk { aspect-ratio: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 26px 18px; padding-bottom: 20px; }
+    .desk > * { position: relative; left: auto !important; top: auto !important; right: auto !important; bottom: auto !important; }
+    .polaroid { width: 100%; }
+    .laptop { grid-column: 1 / -1; width: 80%; justify-self: center; }
+    .note { width: 100%; }
+    .mug { justify-self: center; }
+    .bed { width: 100%; max-width: 220px; justify-self: center; }
+  }
+</style>

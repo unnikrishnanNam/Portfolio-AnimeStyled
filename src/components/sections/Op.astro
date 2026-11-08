@@ -1,0 +1,67 @@
+---
+import Art from '../Art.astro';
+import { person } from '../../data/content.js';
+---
+<section class="sc op" id="ep00" data-ep="ep00" aria-label="Opening">
+  <div class="op__stage">
+    <div class="op__sky" data-depth="0.15"><Art id="BG-01" eager sizes="100vw" alt="" /></div>
+    <div class="op__city" data-depth="0.35"><Art id="BG-02" sizes="100vw" alt="" label="Kochi skyline layer" /></div>
+    <div class="op__lines speedlines" aria-hidden="true"></div>
+    <div class="op__hero"><Art id="CH-01" eager sizes="(max-width: 800px) 90vw, 46vw" alt="Our hero, anime style, pointing straight at you" /></div>
+
+    <div class="op__copy">
+      <p class="op__tag mono">EP.00 · OPENING</p>
+      <h1 class="op__name">
+        <span class="sr-only">{person.name}</span>
+        <span class="op__first" aria-hidden="true">{person.syllables.map((s) => <span class="op__syl">{s}</span>)}</span>
+        <span class="op__last" aria-hidden="true">{person.surname}</span>
+      </h1>
+      <p class="op__role"><span>{person.title}</span><span class="op__badge">CKA</span></p>
+      <p class="op__series" aria-label="Debug, Deploy, Adventure, Repeat">
+        <span>Debug.</span><span>Deploy.</span><span>Adventure.</span><span>Repeat.</span>
+      </p>
+    </div>
+    <p class="op__cue mono" aria-hidden="true"><span>scroll</span><i></i></p>
+  </div>
+</section>
+
+<style is:global>
+  .op { height: 100vh; height: 100svh; min-height: 560px; background: var(--sky); color: var(--ink); }
+  .op__stage { position: absolute; inset: 0; overflow: hidden; }
+  .op__sky, .op__sky .art { position: absolute; inset: -6% -2% -2%; }
+  .op__sky img { width: 100%; height: 100%; object-fit: cover; }
+  .op__city { position: absolute; left: 0; right: 0; bottom: -2%; }
+  .op__city img { width: 100%; height: auto; }
+  .op__city .art--todo { height: 26vh; border-radius: 0; border-width: 2px 0 0; color: rgba(255,255,255,.75); background: linear-gradient(transparent, rgba(22,19,28,.25)); }
+  .op__lines { position: absolute; left: 50%; top: 50%; width: 220vmax; height: 220vmax; margin: -110vmax 0 0 -110vmax; color: rgba(255, 255, 255, .55); animation: spin 40s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .op__hero { position: absolute; right: max(2vw, 12px); bottom: 0; height: min(94vh, 1100px); aspect-ratio: 1031 / 1416; transform-origin: 40% 30%; }
+  .op__hero .art, .op__hero img { height: 100%; width: 100%; }
+  .op__hero img { object-fit: contain; object-position: bottom; filter: drop-shadow(10px 10px 0 rgba(22, 19, 28, .9)); }
+
+  .op__copy { position: absolute; left: var(--gutter); top: 50%; transform: translateY(-46%); width: calc(100% - var(--gutter) * 2); z-index: 2; pointer-events: none; }
+  .op__copy > * { pointer-events: auto; }
+  .op__tag { display: inline-block; margin: 0 0 14px; padding: 6px 10px; background: var(--ink); color: var(--yellow); font-size: 12px; letter-spacing: .2em; }
+  .op__name { margin: 0; display: grid; font-family: var(--f-display); font-weight: 400; line-height: .86; letter-spacing: -.02em; }
+  .op__first { display: flex; white-space: nowrap; font-size: clamp(40px, 8.4vw, 176px); color: var(--paper); -webkit-text-stroke: clamp(3px, .5vw, 8px) var(--ink); paint-order: stroke fill; text-shadow: clamp(4px, .6vw, 10px) clamp(4px, .6vw, 10px) 0 var(--ink); }
+  .op__syl { display: inline-block; }
+  .op__last { margin-top: .12em; font-size: clamp(30px, 5.6vw, 100px); color: var(--yellow); -webkit-text-stroke: clamp(2px, .35vw, 6px) var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); }
+  .op__role { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 22px 0 0; font-weight: 900; font-size: clamp(15px, 1.4vw, 21px); }
+  .op__role > span:first-child { background: var(--paper); border: 2.5px solid var(--ink); padding: 6px 12px; box-shadow: 4px 4px 0 var(--ink); }
+  .op__badge { font-family: var(--f-display); font-weight: 400; background: var(--yellow); border: 2.5px solid var(--ink); padding: 6px 10px; box-shadow: 4px 4px 0 var(--ink); transform: rotate(-6deg); }
+  .op__series { display: flex; flex-wrap: wrap; gap: .1em .45em; margin: 26px 0 0; font-family: var(--f-display); font-size: clamp(18px, 2vw, 30px); color: var(--paper); text-shadow: 0 2px 0 var(--ink), 2px 0 0 var(--ink), -2px 0 0 var(--ink), 0 -2px 0 var(--ink); }
+  .op__series span:nth-child(3) { color: var(--yellow); }
+  .op__cue { position: absolute; left: 50%; bottom: 76px; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; margin: 0; color: var(--paper); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; text-shadow: 0 1px 2px var(--ink); }
+  .op__cue i { width: 2px; height: 34px; background: linear-gradient(var(--paper), transparent); animation: cue 1.6s ease-in-out infinite; transform-origin: top; }
+  @keyframes cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+  @media (max-width: 860px) {
+    .op__hero { right: auto; left: calc(50% - 30svh * 1031 / 1416); top: 6svh; bottom: auto; height: 60svh; -webkit-mask: linear-gradient(#000 70%, transparent); mask: linear-gradient(#000 70%, transparent); }
+    .op__stage::after { content: ''; position: absolute; inset: auto 0 0; height: 52%; z-index: 1; background: linear-gradient(transparent, rgba(8, 34, 110, .7)); pointer-events: none; }
+    .op__copy { top: auto; bottom: 9svh; transform: none; width: calc(100% - var(--gutter) * 2); }
+    .op__first { flex-wrap: wrap; font-size: clamp(46px, 15vw, 110px); }
+    .op__last { font-size: clamp(26px, 8.4vw, 60px); }
+    .op__series { margin-top: 14px; }
+    .op__cue { display: none; }
+  }
+</style>

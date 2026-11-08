@@ -1,0 +1,19 @@
+{
+  "name": "ddar-portfolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "media": "node scripts/media.mjs",
+    "media:watch": "node scripts/media.mjs --watch",
+    "dev": "node scripts/media.mjs && astro dev",
+    "build": "node scripts/media.mjs && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.4.7",
+    "gsap": "^3.15.1",
+    "lenis": "^1.3.27",
+    "sharp": "^0.35.5"
+  }
+}

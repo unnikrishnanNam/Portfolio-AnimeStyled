@@ -1,0 +1,33 @@
+---
+// Fansub subtitle bar, paw cursor, and Muffins' screen-edge cameos.
+import Art from '../Art.astro';
+---
+<div class="fansub" aria-live="polite">
+  <p class="fansub__line subtitle-text" id="fansub"></p>
+</div>
+
+<div class="paw" id="paw" aria-hidden="true">
+  <svg viewBox="0 0 32 32"><g fill="currentColor"><ellipse cx="16" cy="20" rx="6.5" ry="5.5" /><circle cx="7.5" cy="13" r="3" /><circle cx="12.5" cy="8" r="3" /><circle cx="19.5" cy="8" r="3" /><circle cx="24.5" cy="13" r="3" /></g></svg>
+  <b>!</b>
+</div>
+
+<div class="cameo" id="cameo" aria-hidden="true">
+  <div class="cameo__dog"><Art id="MUF-01" sizes="200px" /></div>
+  <p class="cameo__bubble"></p>
+</div>
+
+<style is:global>
+  .paw { position: fixed; left: 0; top: 0; z-index: 200; width: 26px; height: 26px; margin: -13px 0 0 -13px; color: var(--ink); pointer-events: none; opacity: 0; transition: opacity .2s; mix-blend-mode: normal; }
+  html.has-paw .paw { opacity: 1; }
+  .paw svg { width: 100%; height: 100%; filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #fff); transition: transform .2s var(--ease-out); }
+  .paw b { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0); font-family: var(--f-display); font-size: 22px; color: var(--red); -webkit-text-stroke: 4px #fff; paint-order: stroke fill; transition: transform .2s var(--ease-out); }
+  .paw.is-hot svg { transform: scale(0); }
+  .paw.is-hot b { transform: translate(-50%, -50%) scale(1); }
+  .paw.is-dark { color: var(--paper); }
+  @media (pointer: fine) { html.has-paw, html.has-paw a, html.has-paw button, html.has-paw [role="option"] { cursor: none; } html.has-paw input { cursor: text; } }
+
+  .cameo { position: fixed; right: 0; bottom: 18vh; z-index: 65; display: flex; align-items: flex-end; gap: 6px; pointer-events: none; transform: translateX(110%); }
+  .cameo__dog { width: clamp(90px, 11vw, 150px); transform: rotate(-12deg) translate(18%, 12%); }
+  .cameo__dog img { width: 100%; height: auto; }
+  .cameo__bubble { order: -1; margin: 0 0 70% 0; max-width: 220px; padding: 10px 14px; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 18px 18px 4px 18px; box-shadow: 3px 3px 0 var(--ink); font-weight: 700; font-size: 14px; line-height: 1.35; }
+</style>
