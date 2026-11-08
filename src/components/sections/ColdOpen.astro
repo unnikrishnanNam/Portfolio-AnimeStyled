@@ -5,7 +5,7 @@ import Art from '../Art.astro';
   <div class="cold__bg"><Art id="BG-03" eager sizes="100vw" alt="" /></div>
   <div class="cold__scene">
     <div class="cold__sleep"><Art id="GIF-01" eager sizes="(max-width: 800px) 100vw, 70vw" alt="Our hero asleep at the MacBook" label="asleep at the MacBook" /></div>
-    <div class="cold__wake" hidden><Art id="GIF-02" sizes="(max-width: 800px) 100vw, 70vw" alt="Muffins licks our hero awake" label="Muffins wakes our hero" /></div>
+    <div class="cold__wake" hidden><Art id="GIF-02" eager fetchpriority="low" sizes="(max-width: 800px) 100vw, 70vw" alt="Muffins licks our hero awake" label="Muffins wakes our hero" /></div>
   </div>
   <div class="cold__dog"><Art id="MUF-01" eager sizes="240px" alt="Muffins, peeking over the desk" /></div>
   <div class="cold__hud">

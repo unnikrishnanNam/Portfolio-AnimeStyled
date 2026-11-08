@@ -9,6 +9,7 @@ import EpisodeCard from '../EpisodeCard.astro';
       <div class="manga" data-manga>
         <figure class="panel panel--1" data-fansub="Kottayam, Kerala. Our hero wanted to know why things break, and how to keep them running.">
           <div class="panel__art"><Art id="BG-03" sizes="(max-width: 900px) 100vw, 40vw" alt="A rainy night in Kottayam, through the bedroom window" /></div>
+          <div class="panel__kid"><Art id="CH-07" sizes="(max-width: 900px) 40vw, 16vw" alt="Our hero in a green sweater and striped scarf, crouching and smiling" /></div>
           <figcaption class="caption-box">Flashback. Kottayam, monsoon.</figcaption>
         </figure>
         <figure class="panel panel--2">
@@ -68,6 +69,12 @@ api-0   0/1     <span class="r">CrashLoopBackOff</span>
   .panel__art, .panel__art .art { position: absolute; inset: 0; }
   .panel__art img { width: 100%; height: 100%; object-fit: cover; }
   .panel--1 img { filter: grayscale(1) contrast(1.25) brightness(1.05); }
+  /* Monsoon-outfit hero crouching in the flashback panel's foreground. */
+  .panel.panel--1 .caption-box { max-width: 50%; }
+  @media (max-width: 900px) { .panel--1 .panel__kid { right: -2%; height: 78%; } .panel.panel--1 .caption-box { max-width: 46%; } }
+  .panel__kid { position: absolute; right: 4%; bottom: -2%; z-index: 1; height: 96%; aspect-ratio: 4 / 5; }
+  .panel__kid .art, .panel__kid img { width: 100%; height: 100%; }
+  .panel__kid img { object-fit: contain; object-position: bottom; filter: grayscale(1) contrast(1.2) drop-shadow(4px 4px 0 rgba(22, 19, 28, .55)); }
   .panel--1::after { content: ''; position: absolute; inset: 0; color: rgba(22, 19, 28, .5); background: radial-gradient(circle, currentColor 1px, transparent 1.4px) 0 0 / 5px 5px; mix-blend-mode: multiply; }
   .panel--3 .panel__art img { object-fit: contain; object-position: 50% 0; transform: scale(1.5); transform-origin: 50% 0; }
   .panel--4 .panel__art { inset: 10% 6% 0; }

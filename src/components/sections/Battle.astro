@@ -121,6 +121,7 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
         </header>
         <div class="fight__body">
           <div class="fight__stage fight__stage--final">
+            <div class="fight__arena" aria-hidden="true"><Art id="BG-05" sizes="(max-width: 1000px) 100vw, 56vw" alt="" /></div>
             <div class="fight__screen"><Art id="SCR-01" sizes="(max-width: 1000px) 80vw, 34vw" alt="Opscope screenshot: a live Kubernetes topology graph" label="your Opscope screenshot" /></div>
             <div class="fight__hero"><Art id="CH-04" sizes="(max-width: 1000px) 45vw, 22vw" alt="Our hero raising the Opscope lens" /></div>
             <svg class="lens" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40" /><circle class="lens__pupil" cx="50" cy="50" r="13" /><path d="M50 10 V-30" /></svg>
@@ -227,16 +228,16 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
   .fight__hero .art, .fight__hero img, .fight__boss .art, .fight__boss img { width: 100%; height: 100%; }
   .fight__hero img { object-fit: contain; object-position: bottom left; filter: drop-shadow(6px 6px 0 rgba(0, 0, 0, .55)); }
   .fight__boss img { object-fit: contain; filter: drop-shadow(0 0 30px rgba(255, 60, 60, .35)); }
-  .fight__vs { position: absolute; left: 50%; top: 16%; z-index: 3; transform: translate(-50%, -50%) rotate(-8deg); font-family: var(--f-display); font-size: clamp(40px, 5vw, 76px); color: var(--yellow); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); }
+  .fight__vs { position: absolute; left: 60%; top: 9%; z-index: 3; transform: translate(-50%, -50%) rotate(-8deg); font-family: var(--f-display); font-size: clamp(40px, 5vw, 76px); color: var(--yellow); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); }
   .ko { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; pointer-events: none; }
   .ko span { font-family: var(--f-display); font-size: clamp(70px, 10vw, 150px); color: var(--red); -webkit-text-stroke: 6px var(--paper); paint-order: stroke fill; text-shadow: 8px 8px 0 var(--ink); transform: scale(0) rotate(-14deg); }
   .victory { position: absolute; right: 4%; bottom: 5%; z-index: 6; width: min(360px, 78%); padding: 16px 18px; background: var(--paper); color: var(--ink); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 8px 8px 0 var(--yellow); opacity: 0; transform: translateY(30px) scale(.9); visibility: hidden; }
   .victory__k { margin: 0 0 8px; font-family: var(--f-display); font-size: 26px; color: var(--red); letter-spacing: .06em; }
-  .victory dl { margin: 0; display: grid; gap: 4px; padding-right: 64px; }
+  .victory dl { margin: 0; display: grid; gap: 4px; }
   .victory dl div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; font-size: 13.5px; }
   .victory dt { opacity: .6; }
   .victory dd { margin: 0; font-weight: 700; }
-  .victory__pose { position: absolute; right: -18px; bottom: -6px; width: 92px; }
+  .victory__pose { position: absolute; right: -14px; top: -78px; width: 104px; filter: drop-shadow(3px 3px 0 var(--ink)); }
   .victory__pose .art--todo { aspect-ratio: 1; min-height: 0; font-size: 9px; }
 
   .fight__side { display: grid; gap: 14px; align-content: start; }
@@ -286,6 +287,10 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
   .q [data-q="done"] { margin: 0 0 10px; font-family: var(--f-display); font-size: 26px; color: #9fe39a; line-height: 1; }
 
   .fight--final .fight__stage { background: radial-gradient(ellipse at 70% 40%, #7a1410, #2a0606 70%); }
+  .fight__arena, .fight__arena .art, .fight__arena img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .fight__arena img { object-fit: cover; object-position: 50% 70%; filter: saturate(1.1) brightness(.62); }
+  .fight__arena::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 62% 45%, transparent 30%, rgba(20, 4, 8, .55) 100%); }
+  .fight--final .fight__stage::before { z-index: 1; }
   .fight__screen { position: absolute; right: 4%; bottom: 5%; width: 38%; z-index: 3; transform: rotate(3deg); border: 3px solid var(--paper); border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, .5); }
   .fight__screen .art--todo { aspect-ratio: 16 / 10; min-height: 0; border: 0; border-radius: 0; }
   .fight--final .fight__hero { height: 72%; left: -2%; }
@@ -315,11 +320,12 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
   .beast h4 { margin: 6px 0 0; font-family: var(--f-display); font-weight: 400; font-size: 17px; line-height: 1.15; }
   .beast__proj { margin: 0; font-size: 11px; letter-spacing: .14em; color: #ff9d8a; text-transform: uppercase; }
   .beast__txt { margin: 0; font-size: 13.5px; line-height: 1.45; opacity: .85; }
-  .beast__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; }
+  .beast__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 6px; }
+  .beast__foot > * { white-space: nowrap; }
   .beast__repo { font-size: 11px; opacity: .7; }
   .beast__ok { position: absolute; inset: 14px 14px auto; aspect-ratio: 1; display: grid; place-items: center; opacity: 0; pointer-events: none; }
   .beast__ok .art { position: absolute; inset: 0; } .beast__ok .art img { width: 100%; height: 100%; object-fit: contain; }
-  .beast__ok b { position: relative; font-family: var(--f-display); font-size: 40px; color: var(--paper); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; }
+  .beast__ok b { position: absolute; right: 0; bottom: 4%; transform: rotate(-8deg); font-family: var(--f-display); font-size: 30px; color: var(--paper); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; }
   .beast.is-flat .beast__art { transform: scaleY(.08); opacity: .5; transition: transform .25s cubic-bezier(.5, 0, .9, .4), opacity .4s .2s; }
   .beast.is-flat .beast__ok { opacity: 1; transition: opacity .2s .25s; }
   .beast--cross { background: linear-gradient(160deg, rgba(56, 120, 255, .22), rgba(255, 255, 255, .03)); border-color: rgba(120, 170, 255, .5); }

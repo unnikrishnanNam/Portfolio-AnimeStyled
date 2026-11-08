@@ -13,7 +13,7 @@ const tilt = [-7, 5, -3, 8];
     {photos.map((p, i) => (
       <button class={`polaroid polaroid--${i + 1}`} type="button" style={`--t:${tilt[i]}deg`} aria-pressed="false" aria-label={`Photo: ${p.caption} Click to flip.`}>
         <span class="polaroid__inner">
-          <span class="polaroid__front"><Art id={p.art} sizes="260px" alt="" label="your photo, restyled" /></span>
+          <span class="polaroid__front"><Art id={p.art} fallback={p.fallback} sizes="260px" alt="" label="your photo, restyled" /></span>
           <span class="polaroid__back">{p.caption}</span>
         </span>
       </button>
@@ -69,6 +69,9 @@ const tilt = [-7, 5, -3, 8];
   .polaroid__front .art, .polaroid__front img { width: 100%; height: 100%; }
   .polaroid__front img { object-fit: cover; }
   .polaroid__front .art--todo { min-height: 0; border-radius: 2px; font-size: 10px; }
+  /* A cut-out standing in for a photo gets a painted sky behind it. */
+  .polaroid__front [data-want] { background: linear-gradient(#7cc4f5, #d9f0ff 62%, #9cc77a 62%, #6f9a55); }
+  .polaroid__front [data-want] img { object-fit: contain; object-position: 50% 100%; padding-top: 6%; }
   .polaroid__back { transform: rotateY(180deg); display: grid; place-items: center; padding: 12%; color: var(--ink); font-family: var(--f-body); font-weight: 700; font-size: clamp(12px, 1.1vw, 15px); line-height: 1.35; text-align: center; }
   .polaroid:active { cursor: grabbing; }
 
@@ -86,16 +89,20 @@ const tilt = [-7, 5, -3, 8];
   .mug { left: 6%; top: 66%; display: grid; place-items: center; width: clamp(80px, 9%, 120px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #3a2116 0 52%, #f4efe6 53% 100%); box-shadow: 0 8px 18px rgba(0, 0, 0, .4), 18px 0 0 -6px #f4efe6; color: transparent; }
   .mug span { position: absolute; bottom: -26px; color: var(--paper); font-family: var(--f-display); font-size: 10px; letter-spacing: .1em; text-align: center; line-height: 1.1; opacity: .7; }
 
-  .bed { right: -1%; bottom: -8%; width: 22%; aspect-ratio: 1; padding: 0; border: 0; background: none; z-index: 2; }
-  .bed__bag { position: absolute; inset: 12% 0 0; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #2f62d9 0 48%, #1b1b22 50% 100%); box-shadow: 0 12px 24px rgba(0, 0, 0, .5); }
-  .bed__dog { position: absolute; inset: 0 12% 12%; transition: opacity .3s, transform .4s var(--ease-out); }
+  .bed { right: -1%; bottom: -6%; width: 25%; aspect-ratio: 3 / 2; padding: 0; border: 0; background: none; z-index: 2; }
+  .bed__bag { display: none; position: absolute; inset: 0 12%; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #2f62d9 0 48%, #1b1b22 50% 100%); box-shadow: 0 12px 24px rgba(0, 0, 0, .5); }
+  .bed__dog { position: absolute; inset: 0; transition: opacity .3s, transform .4s var(--ease-out); }
+  .bed__dog--sleep img { filter: drop-shadow(0 12px 16px rgba(0, 0, 0, .5)); }
+  /* Without MUF-02, fall back to a CSS bean bag with MUF-01 curled up in it. */
+  .bed:has(.bed__dog--sleep [data-want]) .bed__bag { display: block; }
+  .bed:has(.bed__dog--sleep [data-want]) .bed__dog--sleep { inset: -8% 22% 8%; }
+  .bed__dog--awake { inset: -24% 30% 10%; }
   .bed__dog .art, .bed__dog img { width: 100%; height: 100%; }
   .bed__dog img { object-fit: contain; }
-  .bed__dog--sleep img { filter: brightness(.95); }
   .bed:not(.is-awake) .bed__dog--sleep:has([data-want]) { transform: rotate(-80deg) scale(.82) translate(-6%, 6%); }
   .bed__dog--awake { opacity: 0; transform: translateY(10%) scale(.9); }
   .bed.is-awake .bed__dog--awake { opacity: 1; transform: translateY(-14%) scale(1.06); }
-  .bed.is-awake .bed__dog--sleep, .bed.is-awake .bed__z { opacity: 0; }
+  .bed.is-awake .bed__dog--sleep, .bed.is-awake .bed__z { opacity: 0; transform: scale(.94, .86); transform-origin: 50% 100%; }
   .bed__z { position: absolute; right: 6%; top: -4%; font-family: var(--f-display); font-size: 22px; color: #cfe0ff; }
   .bed__z b, .bed__z i { font-weight: 400; font-style: normal; display: inline-block; animation: zz 1.8s ease-in-out infinite; }
   .bed__z i { animation-delay: .3s; font-size: .8em; }

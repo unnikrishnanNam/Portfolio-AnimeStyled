@@ -46,6 +46,21 @@ import Art from '../Art.astro';
   .fx__logo span:nth-child(2) { color: var(--sky); }
   .fx__logo span:nth-child(3) { color: var(--red); }
   .fx__logo span:nth-child(4) { -webkit-text-stroke: 2px var(--ink); color: var(--yellow); paint-order: stroke fill; }
+  /* Real eyecatch art: fill the card, match its flat colour, put the logo in the blank area. */
+  .fx__eye[data-on="1"] { background: #ffd23f; }
+  .fx__eye[data-on="2"] { background: #2e9beb; }
+  .fx__eye[data-on="3"] { background: #f57a1e; }
+  .fx__eye[data-on]:not([data-on=""]) .fx__eyecard { background: transparent; }
+  .fx__eye[data-on] .fx__eyeart:has([data-art^="EC-"]) { inset: 0; }
+  .fx__eye[data-on] .fx__eyeart:has([data-art^="EC-"]) img { object-fit: cover; }
+  .fx__eye[data-on="1"] .fx__logo, .fx__eye[data-on="2"] .fx__logo, .fx__eye[data-on="3"] .fx__logo { z-index: 1; }
+  .fx__eye[data-on="1"] .fx__logo { left: 5%; }
+  .fx__eye[data-on="2"] .fx__logo { left: auto; right: 5%; text-align: right; transform: translateY(-50%) rotate(4deg); }
+  .fx__eye[data-on="3"] .fx__logo { left: 50%; top: 8%; transform: translateX(-50%) rotate(-3deg); text-align: center; font-size: clamp(20px, 3.6vw, 46px); }
+  .fx__eye[data-on="2"] .fx__logo span, .fx__eye[data-on="3"] .fx__logo span { color: var(--paper); -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; text-shadow: 3px 3px 0 var(--ink); }
+  .fx__eye[data-on="2"] .fx__logo span:nth-child(odd), .fx__eye[data-on="3"] .fx__logo span:nth-child(even) { color: var(--yellow); }
+  .fx__eye[data-on="3"] .fx__logo { grid-template-columns: auto auto; justify-content: center; gap: 0 .35em; width: max-content; }
+  .fx__eye[data-on="2"] .fx__eyelabel, .fx__eye[data-on="3"] .fx__eyelabel { color: var(--paper); }
   .fx__eyelabel { position: absolute; right: 4%; bottom: 3%; margin: 0; font-family: var(--f-display); letter-spacing: .3em; font-size: clamp(11px, 1.2vw, 15px); }
   .fx__power { display: grid; place-items: center; overflow: hidden; }
   .fx__aura { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, #fff2 0, var(--red) 30%, #7a0d0a 75%); clip-path: circle(0% at 50% 50%); }

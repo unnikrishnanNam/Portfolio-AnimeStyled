@@ -116,17 +116,17 @@ export const chapters = [
 export const tiles = [
   { art: 'BG-06a', name: 'Kottayam hills', tint: '#3f7d4e' },
   { art: 'BG-06b', name: 'Amritapuri coast', tint: '#2e9beb' },
-  { art: 'BG-06c', name: 'Kochi skyline', tint: '#c98a3e' },
-  { art: 'BG-06d', name: 'Dehradun foothills', tint: '#6c7a9b' },
+  { art: 'BG-06d', name: 'Kochi skyline', tint: '#c98a3e' },
+  { art: 'BG-06c', name: 'Dehradun foothills', tint: '#6c7a9b' },
 ];
 
 export const inProduction = ['GlassNotch: the MacBook notch as a Liquid Glass island', 'A native macOS video editor', 'A self-hosted family cloud'];
 
 export const photos = [
   { art: 'PH-01', caption: 'Drone shot. One very small drone, one very big sky.' },
-  { art: 'PH-02', caption: 'Hilltop. The trekking pole did most of the work.' },
-  { art: 'PH-03', caption: 'On the road. Somewhere between two deploys.' },
-  { art: 'PH-04', caption: 'Monsoon. Kerala, doing what Kerala does.' },
+  { art: 'PH-02', fallback: 'CH-05', caption: 'Hilltop. The clouds got there first.' },
+  { art: 'PH-03', caption: 'Day out with the squad. Nobody mentioned Kubernetes. Once.' },
+  { art: 'PH-04', caption: 'Muffins, co-pilot. Strict about the playlist.' },
 ];
 
 export const reactions = [

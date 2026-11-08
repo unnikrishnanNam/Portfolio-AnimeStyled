@@ -225,6 +225,7 @@ function initJourney(mm) {
     const remap = flags.map((f) => { const tile = Math.floor(f * 4); const sub = f * 4 - tile; return (tile + 0.1 + sub * 0.6) / 4; });
     flagEls.forEach((el, i) => el.style.setProperty('--x', remap[i]));
     const frames = sprite ? +sprite.dataset.frames : 0;
+    const hudWheel = $('.wheel', sec);
     const state = { p: 0 };
     const update = () => {
       const W = window.innerWidth, trackW = 4 * W;
@@ -241,13 +242,15 @@ function initJourney(mm) {
         for (let i = 0; i < remap.length - 1; i++) if (pos < remap[i + 1]) { f = i + (pos - remap[i]) / (remap[i + 1] - remap[i]); break; }
       }
       gsap.set(wheel, { rotation: -45 * f });
+      // On the last tile the real stone wheel is in the scene, so the HUD wheel steps aside.
+      hudWheel.classList.toggle('is-away', state.p > 0.8);
       setChapter(Math.min(remap.length - 1, Math.floor(f + 0.001)));
       if (sprite && frames > 1) { const fr = Math.floor((pos * trackW) / 38) % frames; sprite.style.backgroundPosition = `0 ${(fr / (frames - 1)) * 100}%`; sprite.style.backgroundSize = `100% ${frames * 100}%`; }
       else gsap.set(walker, { y: Math.abs(Math.sin(pos * 160)) * -10 });
     };
     gsap.to(state, { p: 1, ease: 'none', onUpdate: update, scrollTrigger: { trigger: pin, start: 'top top', end: () => '+=' + 4.2 * window.innerHeight, pin: true, scrub: 0.6, invalidateOnRefresh: true, onRefresh: update } });
     update();
-    return () => { sec.classList.remove('is-h'); gsap.set([track, walker, drone, wheel], { clearProps: 'transform' }); };
+    return () => { sec.classList.remove('is-h'); hudWheel.classList.remove('is-away'); gsap.set([track, walker, drone, wheel], { clearProps: 'transform' }); };
   });
 
   mm.add(`not all and ${BIG}`, () => {
@@ -335,7 +338,7 @@ function initFinale(mm) {
   const sec = $('#ep06');
   mm.add('(min-width: 801px) and (prefers-reduced-motion: no-preference)', () => {
     sec.classList.add('is-anim');
-    const layers = $$('.finale__bg, .finale__hero, .finale__dog', sec);
+    const layers = $$('.finale__bg', sec);
     const f = { s: 1 };
     const paint = () => layers.forEach((l) => { l.style.filter = `sepia(${f.s}) contrast(${1 + f.s * 0.15}) brightness(${1 - f.s * 0.08})`; });
     const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top top', end: '+=170%', pin: true, scrub: 0.5, onEnter: () => say('തുടരും… To be continued.') } });
@@ -345,7 +348,7 @@ function initFinale(mm) {
       .to(f, { s: 0, duration: 0.3, onUpdate: paint })
       .to('.finale__grain', { opacity: 0, duration: 0.2 }, '<')
       .to('.endcard', { opacity: 0, y: '-22vh', scale: 0.7, duration: 0.2 }, '<0.12')
-      .fromTo('.contact', { opacity: 0, yPercent: -30 }, { opacity: 1, yPercent: -50, duration: 0.3, ease: 'power3.out' }, '>')
+      .fromTo('.contact', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }, '>')
       .to({}, { duration: 0.35 });
     paint();
     return () => { sec.classList.remove('is-anim'); layers.forEach((l) => (l.style.filter = '')); };
@@ -357,12 +360,15 @@ function initCredits(mm) {
   const sec = $('#credits'), roll = $('.credits__roll', sec);
   mm.add(MOTION, () => {
     gsap.to(roll, { y: () => -(roll.offsetHeight - window.innerHeight * 0.55), ease: 'none', scrollTrigger: { trigger: '.credits__pin', start: 'top top', end: () => '+=' + roll.offsetHeight * 0.9, pin: true, scrub: true, invalidateOnRefresh: true } });
-    gsap.fromTo('.post__dog', { x: '-60vw' }, {
-      x: 0, duration: 1.4, ease: 'power2.out', scrollTrigger: { trigger: '.post', start: 'top 75%', toggleActions: 'play none none reverse' },
-      onComplete: () => gsap.fromTo('.post__dog', { y: 0 }, { y: 14, duration: 0.18, yoyo: true, repeat: 1 }),
+    const dog = $('.post__dog');
+    gsap.fromTo(dog, { x: '-60vw' }, {
+      x: 0, duration: 1.4, ease: 'power2.out',
+      scrollTrigger: { trigger: '.post', start: 'top 75%', toggleActions: 'play none none reverse', onLeaveBack: () => dog.classList.remove('is-sat') },
+      onStart: () => dog.classList.remove('is-sat'),
+      onComplete: () => { dog.classList.add('is-sat'); gsap.fromTo(dog, { y: 0 }, { y: 14, duration: 0.18, yoyo: true, repeat: 1 }); },
     });
   });
-  mm.add('(prefers-reduced-motion: reduce)', () => { sec.classList.add('is-static'); });
+  mm.add('(prefers-reduced-motion: reduce)', () => { sec.classList.add('is-static'); $('.post__dog').classList.add('is-sat'); });
   $('[data-rewind]').addEventListener('click', () => {
     quiet(5000);
     fx.run('fade', { onCover: () => jump(0) }).then(() => playCold({ rerun: true }));

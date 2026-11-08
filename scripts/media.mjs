@@ -118,6 +118,9 @@ async function framesFromZip(zip) {
   finally { fs.rmSync(dir, { recursive: true, force: true }); }
 }
 
+// One-shot animations (play once, hold the last frame): "-once" in the name, or listed here.
+const ONCE = new Set(['GIF-02']);
+
 async function anim(file, key, zip) {
   const base = key.replace('@p', '-p');
   const outA = path.join(OUT, `${base}.webp`), outP = path.join(OUT, `${base}-poster.webp`), outS = path.join(OUT, `${base}-strip.webp`);
@@ -139,12 +142,13 @@ async function anim(file, key, zip) {
   if (keyed) keyMagenta(data, 4);
   const delay = meta.delay && meta.delay.length === frames ? meta.delay : Array(frames).fill((meta.delay && meta.delay[0]) || 220);
   const raw = { width: fw, height: fh * frames, channels: 4 };
-  await sharp(data, { raw: { ...raw, pageHeight: fh } }).webp({ quality: 80, alphaQuality: 90, effort: 4, loop: 0, delay }).toFile(outA);
+  const once = ONCE.has(key) || /-once/i.test(path.basename(file));
+  await sharp(data, { raw: { ...raw, pageHeight: fh } }).webp({ quality: 80, alphaQuality: 90, effort: 4, loop: once ? 1 : 0, delay }).toFile(outA);
   await sharp(Buffer.from(data.subarray(0, fw * fh * 4)), { raw: { width: fw, height: fh, channels: 4 } }).webp({ quality: 85, alphaQuality: 90 }).toFile(outP);
   // Sprite strip (frames stacked vertically), capped so WebP size limits hold.
   const scale = Math.min(1, 16000 / (fh * frames));
   await sharp(data, { raw }).resize({ width: Math.round(fw * scale) }).webp({ quality: 82, alphaQuality: 90 }).toFile(outS);
-  const info = { w: fw, h: fh, frames, alpha: keyed || !!meta.hasAlpha, delay };
+  const info = { w: fw, h: fh, frames, alpha: keyed || !!meta.hasAlpha, delay, once };
   fs.writeFileSync(outM, JSON.stringify(info));
   console.log(`  anim   ${key}  ${fw}x${fh} x${frames}${z ? '  (from frame zip)' : ''}${keyed ? '  (magenta keyed)' : ''}`);
   return { kind: 'anim', ...info, ...urls };

@@ -49,7 +49,10 @@ export function run(type, { onCover, ec } = {}) {
       .set($('.fx__slash'), { visibility: 'hidden' });
   } else if (kind === 'eyecatch') {
     const eye = $('.fx__eye'), card = $('.fx__eyecard');
-    root.querySelectorAll('[data-ec]').forEach((n) => (n.hidden = n.dataset.ec !== String(ec || 1)));
+    const n = String(ec || 1);
+    root.querySelectorAll('[data-ec]').forEach((el) => (el.hidden = el.dataset.ec !== n));
+    // Finished EC art is a full card with its own flat colour and a blank area for the logo.
+    eye.dataset.on = root.querySelector(`[data-ec="${n}"] [data-art^="EC-"]`) ? n : '';
     sfx('whoosh');
     tl.set(eye, { visibility: 'visible', clipPath: 'circle(0% at 50% 50%)' })
       .set(card, { rotationY: -100, rotationZ: -8, scale: 0.6, opacity: 0 })

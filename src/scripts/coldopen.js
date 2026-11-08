@@ -23,7 +23,7 @@ function waitForAssets(timeout = 6000) {
 
 export function opIntro() {
   html.classList.add('notch-ready');
-  say('Debug. Deploy. Adventure. Repeat.');
+  say('Six episodes. One hero. One very small dog.');
   if (reduced) return;
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
   tl.from('.op__hero .art', { xPercent: 18, scale: 0.92, opacity: 0, duration: 0.7 })
@@ -74,14 +74,22 @@ export function playCold({ rerun = false } = {}) {
       skip.removeEventListener('click', onSkip);
       const go = () => finish(() => { opIntro(); resolve(); });
       if (skipped || reduced) { go(); return; }
-      // Muffins leaps up and licks our hero awake.
-      const hasWake = wake.querySelector('img');
+      const wakeImg = wake.querySelector('img');
       const tl = gsap.timeline({ onComplete: go });
-      tl.to(dog, { y: '-46vh', x: '-20vw', rotation: -18, scale: 1.25, duration: 0.5, ease: 'power2.out' })
-        .add(() => sfx('bark'))
-        .add(() => { if (hasWake) { sleep.hidden = true; wake.hidden = false; } })
-        .to(dog, { rotation: 8, duration: 0.12, yoyo: true, repeat: 3, ease: 'sine.inOut' })
-        .to({}, { duration: hasWake ? 1.3 : 0.25 });
+      if (wakeImg) {
+        // The wake-up GIF has Muffins in it: the peeking dog ducks out, the one-shot plays from frame 1.
+        const ms = (+wakeImg.dataset.duration || 1800) / 1000;
+        tl.to(dog, { yPercent: 60, opacity: 0, duration: 0.25, ease: 'power2.in' })
+          .add(() => { wakeImg.src = wakeImg.src.split('#')[0] + '#' + Date.now(); sleep.hidden = true; wake.hidden = false; })
+          .add(() => sfx('bark'), ms * 0.4)
+          .to({}, { duration: ms * 0.6 + 0.7 });
+      } else {
+        // No wake-up GIF yet: Muffins leaps up and licks our hero awake.
+        tl.to(dog, { y: '-46vh', x: '-20vw', rotation: -18, scale: 1.25, duration: 0.5, ease: 'power2.out' })
+          .add(() => sfx('bark'))
+          .to(dog, { rotation: 8, duration: 0.12, yoyo: true, repeat: 3, ease: 'sine.inOut' })
+          .to({}, { duration: 0.25 });
+      }
     };
     const onSkip = () => end(true);
     skip.addEventListener('click', onSkip);

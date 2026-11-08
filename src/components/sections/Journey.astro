@@ -17,7 +17,7 @@ const walk = (media as Record<string, any>)['GIF-04'];
 <section class="sc journey" id="ep04" data-ep="ep04" data-fx="slash" aria-labelledby="journey-h">
   <div class="wrap journey__intro">
     <EpisodeCard ep="ep04" />
-    <p class="journey__lede" id="journey-h">Eight chapters, from Kottayam to Dehradun and back to Kochi. The stone wheel keeps time: scroll to turn it.</p>
+    <p class="journey__lede" id="journey-h">Eight chapters: Kottayam, the Amritapuri coast, Kochi, and a stone wheel in the foothills of Dehradun. The wheel keeps time: scroll to turn it.</p>
   </div>
 
   <div class="journey__pin" data-flags={JSON.stringify(flags)} data-fansub="New town. New stack. Same green hoodie.">
@@ -98,14 +98,18 @@ const walk = (media as Record<string, any>)['GIF-04'];
   .journey.is-h .journey__pin { height: 100vh; padding: 0; overflow: hidden; }
   .journey.is-h .journey__track { position: absolute; left: 0; top: 0; display: flex; gap: 0; width: 400vw; height: 100%; margin: 0; }
   .journey.is-h .tile { flex: 0 0 100vw; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; }
-  .journey.is-h .tile + .tile { box-shadow: -1px 0 0 rgba(22, 19, 28, .2); }
+  /* Tiles overlap and cross-fade so the seams disappear; the path sits at 80% of every tile. */
+  .journey.is-h .tile { overflow: visible; background: none; }
+  .journey.is-h .tile img { object-position: 50% 80%; }
+  .journey.is-h .tile + .tile > .art { position: absolute; top: 0; bottom: 0; left: -12vw; width: calc(100% + 12vw); max-width: none; -webkit-mask: linear-gradient(90deg, transparent, #000 12vw); mask: linear-gradient(90deg, transparent, #000 12vw); }
+  .journey.is-h .tile .art--todo { left: 0 !important; width: 100% !important; -webkit-mask: none !important; mask: none !important; }
   .journey.is-h .tile__name { left: 24px; bottom: auto; top: 76px; }
-  .journey.is-h .tile__stand { right: 30%; bottom: 14%; width: min(18vw, 260px); }
-  .journey.is-h .flag { display: block; position: absolute; left: calc(var(--x) * 100%); bottom: 12vh; width: 34px; height: 120px; margin-left: -17px; padding: 0; border: 0; background: none; }
+  .journey.is-h .tile__stand { right: calc(26% - min(8vw, 115px)); bottom: 17%; width: min(16vw, 230px); z-index: 2; }
+  .journey.is-h .flag { display: block; position: absolute; z-index: 2; left: calc(var(--x) * 100%); bottom: 21.5vh; width: 34px; height: 96px; margin-left: -17px; padding: 0; border: 0; background: none; }
   .flag__pole { position: absolute; left: 50%; bottom: 0; width: 3px; height: 100%; background: var(--ink); }
   .flag__cloth { position: absolute; left: 50%; top: 0; padding: 4px 10px 4px 8px; background: var(--paper); border: 2px solid var(--ink); font-size: 12px; font-weight: 700; clip-path: polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%); transition: background .2s; }
   .flag.is-passed .flag__cloth { background: var(--red); color: #fff; }
-  .journey.is-h .journey__walker { display: block; position: absolute; left: 22vw; bottom: 9vh; z-index: 3; height: min(42vh, 420px); aspect-ratio: 1; }
+  .journey.is-h .journey__walker { display: block; position: absolute; left: 22vw; bottom: calc(19vh - min(3.6vh, 36px)); z-index: 3; height: min(42vh, 420px); aspect-ratio: 1; }
   .journey__walker .art, .journey__walker img { width: 100%; height: 100%; }
   .journey__walker img { object-fit: contain; object-position: bottom; }
   .walker { height: 100%; background-size: 100% auto; background-repeat: no-repeat; }
@@ -116,7 +120,8 @@ const walk = (media as Record<string, any>)['GIF-04'];
   .journey.is-h .chapters { position: relative; width: 100%; display: grid; }
   .journey.is-h .chapter { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .35s, transform .35s var(--ease-out), visibility .35s; }
   .journey.is-h .chapter.is-on { opacity: 1; visibility: visible; transform: none; }
-  .journey.is-h .wheel { position: relative; top: auto; width: min(34vh, 300px); }
+  .journey.is-h .wheel { position: relative; top: auto; width: min(34vh, 300px); transition: opacity .4s, transform .5s var(--ease-out); }
+  .journey.is-h .wheel.is-away { opacity: 0; transform: translateY(30%) scale(.8); }
 
   @media (max-width: 760px) {
     .journey__track { grid-template-columns: 1fr; }

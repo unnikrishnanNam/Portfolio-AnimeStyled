@@ -17,6 +17,7 @@ Drop files into `assets/raw/<folder>/` named by asset ID (`CH-02-arms-crossed.pn
 - `9x16` in a name marks the portrait version of a background.
 - Flat magenta (#FF00FF) backgrounds are keyed out automatically.
 - A `<ID>-…frames.zip` next to a GIF is used instead of the GIF (full colour, no dithering).
+- Loops repeat forever. A one-shot (plays once, holds the last frame) has `-once` in its name or is listed in `ONCE` in `scripts/media.mjs` (GIF-02 is).
 - Missing art shows as a labelled placeholder in dev and is left out of production builds.
 
 Your Opscope screenshot goes in `assets/raw/screenshots/SCR-01-opscope.png`. A `public/resume.pdf` switches on the résumé buttons.

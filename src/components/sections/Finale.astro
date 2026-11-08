@@ -5,11 +5,10 @@ import Art from '../Art.astro';
 import { person } from '../../data/content.js';
 const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.resume));
 ---
-<section class="sc finale" id="ep06" data-ep="ep06" aria-labelledby="finale-h">
+<section class="sc finale" id="ep06" data-ep="ep06" data-fx="eyecatch" data-ec="3" aria-labelledby="finale-h">
   <div class="finale__stage">
-    <div class="finale__bg"><Art id="BG-07" sizes="100vw" alt="A Kochi rooftop at golden hour, Chinese fishing nets on the water" /></div>
-    <div class="finale__hero"><Art id="GIF-06" fallback="CH-01" sizes="(max-width: 800px) 70vw, 32vw" alt="Our hero waving goodbye" label="waving goodbye" /></div>
-    <div class="finale__dog"><Art id="MUF-01" sizes="(max-width: 800px) 30vw, 14vw" alt="Muffins, wagging" /></div>
+    <!-- GIF-06 is the whole scene: the BG-07 rooftop with our hero and Muffins already in it. -->
+    <div class="finale__bg"><Art id="GIF-06" fallback="BG-07" sizes="100vw" alt="On a Kochi rooftop at sunset, our hero waves goodbye while Muffins sits at their feet" /></div>
     <div class="finale__grain" aria-hidden="true"></div>
 
     <div class="endcard">
@@ -37,22 +36,17 @@ const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.
   .finale { height: 100vh; height: 100svh; min-height: 620px; background: #f2a35e; color: var(--ink); }
   .finale__stage { position: absolute; inset: 0; overflow: hidden; }
   .finale__bg, .finale__bg .art, .finale__bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .finale__bg img { object-fit: cover; }
-  .finale__stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(40, 14, 30, .55), transparent 55%); }
-  .finale__hero { position: absolute; left: 4%; bottom: 0; z-index: 2; height: 74%; aspect-ratio: 1031 / 1416; }
-  .finale__hero .art, .finale__hero img { width: 100%; height: 100%; }
-  .finale__hero img { object-fit: contain; object-position: bottom; }
-  .finale__hero .art--todo { color: rgba(255,255,255,.8); }
-  .finale__dog { position: absolute; left: calc(4% + min(40vh, 34vw)); bottom: 0; z-index: 3; width: min(15vw, 190px); }
-  .finale__dog img { width: 100%; height: auto; }
+  /* The hero stands right of centre in the scene, so the copy lives on the left. */
+  .finale__bg img { object-fit: cover; object-position: 60% 72%; }
+  .finale__stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(40, 14, 30, .6), rgba(40, 14, 30, .25) 45%, transparent 62%); }
   .finale__grain { position: absolute; inset: -50%; z-index: 4; pointer-events: none; opacity: 0; background-image: radial-gradient(rgba(0,0,0,.25) 1px, transparent 1px); background-size: 3px 3px; animation: grain .5s steps(4) infinite; }
   @keyframes grain { 25% { transform: translate(-1%, 1%); } 50% { transform: translate(1%, -1%); } 75% { transform: translate(-1%, -1%); } }
 
-  .endcard { position: absolute; left: 50%; top: 42%; z-index: 5; transform: translate(-50%, -50%); text-align: center; color: var(--paper); text-shadow: 0 4px 30px rgba(0, 0, 0, .45); }
-  .endcard__ml { margin: 0; font-family: var(--f-ml); font-weight: 800; font-size: clamp(64px, 12vw, 200px); line-height: 1.1; -webkit-text-stroke: 2px rgba(22, 19, 28, .5); }
+  .endcard { position: absolute; left: 30%; top: 40%; z-index: 5; transform: translate(-50%, -50%); text-align: center; color: var(--paper); text-shadow: 0 4px 30px rgba(0, 0, 0, .45); }
+  .endcard__ml { margin: 0; font-family: var(--f-ml); font-weight: 800; font-size: clamp(56px, 9vw, 160px); line-height: 1.1; -webkit-text-stroke: 2px rgba(22, 19, 28, .5); }
   .endcard__en { margin: 0; letter-spacing: .5em; font-size: clamp(12px, 1.2vw, 16px); }
 
-  .contact { position: absolute; right: var(--gutter); top: 50%; z-index: 6; width: min(560px, calc(100% - var(--gutter) * 2)); transform: translateY(-50%); padding: clamp(20px, 3vw, 34px); background: var(--paper); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 10px 10px 0 var(--ink); }
+  .contact { position: absolute; left: var(--gutter); top: 0; bottom: 0; height: fit-content; margin-block: auto; z-index: 6; width: min(560px, calc(100% - var(--gutter) * 2)); padding: clamp(20px, 3vw, 34px); background: var(--paper); border: 3px solid var(--ink); border-radius: 22px; box-shadow: 10px 10px 0 var(--ink); }
   .contact__k { margin: 0; font-size: 12px; letter-spacing: .3em; color: var(--red); }
   .contact__h { margin: 4px 0 10px; font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 4.4vw, 64px); line-height: 1; }
   .contact__p { margin: 0 0 18px; font-weight: 700; }
@@ -60,15 +54,18 @@ const hasResume = fs.existsSync(path.join(process.cwd(), 'public', person.links.
   .contact__email { margin: 16px 0 0; font-size: 13px; opacity: .7; word-break: break-all; }
 
   html.js .finale.is-anim .endcard { opacity: 0; }
-  html.js .finale.is-anim .contact { opacity: 0; transform: translateY(-40%); }
+  html.js .finale.is-anim .contact { opacity: 0; }
 
   @media (max-width: 800px) {
-    .finale { height: auto; min-height: 0; }
-    .finale__stage { position: relative; min-height: 100svh; display: grid; align-content: end; padding: 120px var(--gutter) 90px; }
-    .finale__hero { left: -6%; height: 56%; top: 6%; bottom: auto; }
-    .finale__dog { left: auto; right: 6%; top: 40%; bottom: auto; width: 28vw; }
-    .endcard { top: 16%; }
-    .contact { position: relative; right: auto; top: auto; transform: none; width: 100%; margin-top: 46vh; }
-    html.js .finale.is-anim .contact { transform: none; }
+    .finale { height: auto; min-height: 0; background: #2a1830; }
+    .finale__stage { position: relative; display: grid; align-content: end; padding: 0 var(--gutter) 90px; }
+    /* Phone: the scene sits on top, framed on our hero, and fades into the page. */
+    .finale__bg { bottom: auto; height: 68svh; }
+    .finale__bg .art, .finale__bg img { height: 100%; }
+    .finale__bg img { object-position: 64% 80%; }
+    .finale__bg::after { content: ''; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(transparent, #2a1830); }
+    .finale__stage::after { background: linear-gradient(rgba(40, 14, 30, .45), transparent 30%); }
+    .endcard { left: 50%; top: max(96px, 13svh); }
+    .contact { position: relative; left: auto; top: auto; bottom: auto; width: 100%; margin-top: 58svh; }
   }
 </style>

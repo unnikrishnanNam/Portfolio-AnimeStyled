@@ -27,6 +27,8 @@ const og = new URL('/media/BG-07-1664.webp', Astro.site).toString();
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        // The story always starts at episode 0: stop the browser restoring the old scroll spot on reload.
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         try { if (localStorage.getItem('ddar-seen')) d.classList.add('is-returning'); } catch (e) {}
         try { if (localStorage.getItem('ddar-sfx') === 'on') d.classList.add('sfx-on'); } catch (e) {}
         if (!d.classList.contains('is-returning')) d.classList.add('is-cold');

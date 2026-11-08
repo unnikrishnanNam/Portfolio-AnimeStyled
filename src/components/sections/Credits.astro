@@ -23,7 +23,10 @@ import { credits, person } from '../../data/content.js';
   <div class="post">
     <p class="post__k mono">POST-CREDITS SCENE</p>
     <div class="post__floor">
-      <div class="post__dog"><Art id="GIF-07" fallback="MUF-01" sizes="200px" alt="Muffins trots in and sits on the button" /></div>
+      <div class="post__dog">
+        <span class="post__trot"><Art id="GIF-07" fallback="MUF-01" sizes="200px" alt="Muffins trots in and sits on the button" /></span>
+        <span class="post__sit" aria-hidden="true"><Art id="MUF-01" sizes="200px" alt="" /></span>
+      </div>
       <button class="post__btn btn btn--yellow" type="button" data-rewind>↑ Back to episode 0</button>
     </div>
     <p class="post__fine">© 2026 {person.name}. Illustrations generated with AI from the author’s own photos. Built with Astro, GSAP and Lenis. No Shih Tzus were harmed; one was mildly inconvenienced.</p>
@@ -48,6 +51,11 @@ import { credits, person } from '../../data/content.js';
   .post__floor { position: relative; display: grid; justify-items: center; padding-top: 128px; }
   .post__dog { position: absolute; top: 0; left: 50%; width: 104px; margin-left: -52px; z-index: 2; pointer-events: none; }
   .post__dog img { width: 100%; height: auto; }
+  /* She trots in (GIF-07), then sits once she arrives (MUF-01). */
+  .post__dog > span { display: block; }
+  .post__sit { position: absolute; left: 6%; right: 6%; bottom: 0; opacity: 0; }
+  .post__dog.is-sat .post__trot { opacity: 0; }
+  .post__dog.is-sat .post__sit { opacity: 1; }
   .post__dog .art--todo { aspect-ratio: 1; min-height: 0; color: #777; }
   .post__btn { position: relative; z-index: 1; }
   .post__fine { max-width: 60ch; margin: 30px 0 0; font-size: 12.5px; color: #7b766c; }

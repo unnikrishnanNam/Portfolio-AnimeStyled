@@ -41,7 +41,7 @@ const aspect = ratio || (m && m.w && m.h ? `${m.w} / ${m.h}` : undefined);
 {m && m.kind === 'anim' && (
   <picture class:list={['art', 'art--anim', cls]} data-art={useId} data-want={id !== useId ? id : undefined} style={style}>
     <source media="(prefers-reduced-motion: reduce)" srcset={m.poster} />
-    <img src={m.src} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" draggable="false" data-poster={m.poster} {...rest} />
+    <img src={m.src} width={m.w} height={m.h} alt={alt} loading={loading} decoding="async" draggable="false" data-poster={m.poster} data-duration={m.delay ? m.delay.reduce((a: number, b: number) => a + b, 0) : undefined} data-once={m.once ? '' : undefined} {...rest} />
   </picture>
 )}
 {m && m.kind === 'video' && (

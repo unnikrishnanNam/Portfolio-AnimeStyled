@@ -18,5 +18,6 @@ export default defineConfig({
   site: 'https://unnikrishnanek.com',
   build: { inlineStylesheets: 'auto' },
   integrations: [mediaWatch],
+  devToolbar: { enabled: false },
   vite: { server: { watch: { ignored: ['**/assets/raw/**'] } } },
 });
