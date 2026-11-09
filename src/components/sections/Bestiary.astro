@@ -1,0 +1,256 @@
+---
+// Bestiary: four side-quest monsters. "Fight" flips a card to a mini-game themed on the project;
+// winning captures the monster (holo card, sparks). Capture all four for a deadpan "OK.".
+import Art from '../Art.astro';
+import { bestiary } from '../../data/content.js';
+
+const files = [
+  '~/projects/opscope/cmd/server/main.go',
+  '~/projects/xplore/src/palette.tsx',
+  '~/notes/cka-cheatsheet.md',
+  '~/photos/2026/muffins-asleep.png',
+  '~/photos/2026/muffins.png',
+  '~/downloads/boarding-pass.pdf',
+  '~/.ssh/config',
+  '~/projects/queuectl/README.md',
+];
+const prompts = [
+  { q: 'How many orders shipped today?', a: "SELECT count(*)\nFROM orders\nWHERE status = 'shipped'\n  AND shipped_at::date = current_date;" },
+  { q: 'Top 3 customers by revenue', a: 'SELECT customer_id, sum(total) AS revenue\nFROM orders\nGROUP BY customer_id\nORDER BY revenue DESC\nLIMIT 3;' },
+  { q: 'Delete all users', a: '', reckless: true },
+];
+---
+<div class="wrap bestiary" id="bestiary" data-fansub="Smaller monsters. Each one fights differently.">
+  <header class="bestiary__head">
+    <div>
+      <p class="bestiary__k mono">BESTIARY · SIDE QUESTS</p>
+      <h3 class="bestiary__h">Capture all four.</h3>
+    </div>
+    <div class="dex" aria-live="polite">
+      <span class="dex__k mono">CAPTURED</span>
+      <ol class="dex__slots" aria-hidden="true">
+        {bestiary.map((m) => <li><Art id={m.art} sizes="48px" alt="" /></li>)}
+      </ol>
+      <b class="dex__n mono" data-dex>0 / {bestiary.length}</b>
+    </div>
+  </header>
+
+  <div class="mons">
+    {bestiary.map((m, i) => (
+      <article class="mon" data-mon={i} data-game={m.game} data-win={m.win} aria-label={m.name}>
+        <div class="mon__inner">
+          <div class="mon__face mon__front">
+            <div class="mon__art"><Art id={m.art} sizes="(max-width: 700px) 70vw, 240px" alt={m.name} label={m.name} /></div>
+            <span class="mon__stamp" aria-hidden="true">CAPTURED</span>
+            <h4 class="mon__name">{m.name}</h4>
+            <p class="mon__proj mono">{m.project}</p>
+            <p class="mon__txt">{m.text}</p>
+            <div class="mon__foot">
+              <button class="btn btn--sm btn--yellow mon__fight" type="button" data-fight>Fight ⚔</button>
+              {m.repo && <a class="mon__repo mono" href={m.repo} target="_blank" rel="noopener">repo ↗</a>}
+            </div>
+          </div>
+
+          <div class="mon__face mon__back" inert>
+            <header class="mon__bar">
+              <span class="mono">VS · {m.name.replace('The ', '').toUpperCase()}</span>
+              <button class="mon__flee" type="button" data-flee aria-label="Run away">✕</button>
+            </header>
+            <p class="mon__task">{m.task}</p>
+
+            {m.game === 'failover' && (
+              <div class="g g--failover">
+                <div class="pg" role="group" aria-label="PostgreSQL cluster. Click a node to take it down.">
+                  {[0, 1, 2].map((n) => (
+                    <button class:list={['pg__node', { 'is-primary': n === 0 }]} type="button" data-node={n}>
+                      <i class="pg__db" aria-hidden="true"></i><b class="mono">pg-{n}</b><span class="mono" data-role>{n === 0 ? 'primary' : 'replica'}</span>
+                    </button>
+                  ))}
+                </div>
+                <p class="g__log mono" data-log aria-live="polite">writes: OK · click a node to take it down</p>
+              </div>
+            )}
+
+            {m.game === 'cache' && (
+              <div class="g g--cache">
+                <svg class="map" viewBox="0 0 300 150" aria-hidden="true">
+                  <path class="map__route map__route--far" d="M40 118 L 96 92 L 262 34" />
+                  <path class="map__route map__route--near" d="M40 118 L 96 92" />
+                  <circle class="map__node map__node--you" cx="40" cy="118" r="7" />
+                  <circle class="map__node map__node--edge" cx="96" cy="92" r="9" />
+                  <circle class="map__node map__node--origin" cx="262" cy="34" r="11" />
+                  <text x="40" y="140" text-anchor="middle">you</text>
+                  <text x="96" y="76" text-anchor="middle">edge</text>
+                  <text x="262" y="62" text-anchor="middle">origin</text>
+                  <circle class="map__pkt" cx="40" cy="118" r="5" />
+                </svg>
+                <button class="btn btn--sm" type="button" data-req>Request /muffins.mp4</button>
+                <p class="g__log mono" data-log aria-live="polite">edge cache: empty</p>
+              </div>
+            )}
+
+            {m.game === 'sql' && (
+              <div class="g g--sql">
+                <div class="chat" data-chat aria-live="polite"></div>
+                <div class="chips">
+                  {prompts.map((p, k) => (
+                    <button class:list={['chip-q', { 'is-reckless': p.reckless }]} type="button" data-q={k} data-a={p.a} data-reckless={p.reckless ? '1' : undefined}>{p.q}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {m.game === 'palette' && (
+              <div class="g g--palette">
+                <label class="pal">
+                  <span class="pal__k mono" aria-hidden="true">⌘K</span>
+                  <input class="pal__in" type="text" placeholder="Search files…" autocomplete="off" spellcheck="false" aria-label="Search files" data-files={JSON.stringify(files)} />
+                </label>
+                <ul class="pal__list mono" role="listbox" aria-label="Matching files"></ul>
+                <p class="g__log mono" data-log aria-live="polite">try typing: muf</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="dex__done" aria-hidden="true">
+    <div class="dex__ok"><Art id="CH-08" sizes="120px" alt="" /></div>
+    <p><b>OK.</b> All four captured. They were all small, to be fair.</p>
+  </div>
+
+  <aside class="cross">
+    <p class="cross__k mono">CROSSOVER EPISODE · JAN – FEB 2026</p>
+    <h4 class="cross__h">Whatomate × Zerodha</h4>
+    <p class="cross__big">−50%</p>
+    <p class="cross__txt">DB queries per webhook event, after refactoring the campaign-status hot path in Go to use PostgreSQL’s <code>RETURNING</code>. Merged under Zerodha’s code review.</p>
+  </aside>
+</div>
+
+<style is:global>
+  @property --holo { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+  .bestiary { position: relative; padding-block: clamp(70px, 12vh, 130px) clamp(80px, 14vh, 140px); }
+  .bestiary__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+  .bestiary__k { margin: 0 0 6px; font-size: 12px; letter-spacing: .3em; color: #ff9d8a; }
+  .bestiary__h { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 4vw, 56px); line-height: 1; }
+  .dex { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border: 2px solid rgba(251, 248, 241, .2); border-radius: 99px; background: rgba(0, 0, 0, .3); }
+  .dex__k { font-size: 11px; letter-spacing: .2em; opacity: .7; }
+  .dex__slots { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+  .dex__slots li { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; background: rgba(255, 255, 255, .06); box-shadow: inset 0 0 0 2px rgba(251, 248, 241, .2); }
+  .dex__slots .art, .dex__slots img { width: 100%; height: 100%; }
+  .dex__slots img { object-fit: contain; filter: grayscale(1) brightness(.35); transition: filter .4s; }
+  .dex__slots li.is-on { box-shadow: inset 0 0 0 2px var(--yellow), 0 0 12px rgba(255, 210, 63, .5); }
+  .dex__slots li.is-on img { filter: none; }
+  .dex__n { font-size: 15px; color: var(--yellow); }
+
+  .mons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .mon { position: relative; perspective: 1400px; min-height: 470px; }
+  .mon__inner { position: relative; display: grid; height: 100%; transform-style: preserve-3d; transition: transform .7s var(--ease-out); }
+  .mon.is-flipped .mon__inner { transform: rotateY(180deg); }
+  .mon__face { grid-area: 1 / 1; position: relative; display: flex; flex-direction: column; gap: 6px; min-height: 100%; padding: 16px; border: 2px solid rgba(251, 248, 241, .22); border-radius: 18px; background: linear-gradient(170deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02)); backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+  .mon__back { transform: rotateY(180deg); background: linear-gradient(170deg, #241626, #170e18); border-color: rgba(255, 157, 138, .45); }
+  .mon__art { position: relative; aspect-ratio: 1; margin: -4px -4px 4px; transition: transform .3s var(--ease-out); }
+  .mon__art .art, .mon__art img { width: 100%; height: 100%; }
+  .mon__art img { object-fit: contain; filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .5)); }
+  .mon__art .art--todo { min-height: 0; }
+  .mon:not(.is-caught) .mon__front:hover .mon__art { transform: translateY(-6px) rotate(-2deg) scale(1.03); }
+  .mon__name { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 19px; line-height: 1.15; }
+  .mon__proj { margin: 0; font-size: 11px; letter-spacing: .14em; color: #ff9d8a; text-transform: uppercase; }
+  .mon__txt { margin: 0; font-size: 13.5px; line-height: 1.45; opacity: .85; }
+  .mon__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 8px; }
+  .mon__foot > * { white-space: nowrap; }
+  .mon__repo { font-size: 11px; opacity: .75; }
+  .mon__stamp { position: absolute; left: 50%; top: 30%; z-index: 2; padding: 4px 12px; border: 4px solid var(--red); border-radius: 8px; color: var(--red); background: rgba(18, 12, 16, .65); font-family: var(--f-display); font-size: 24px; letter-spacing: .06em; transform: translate(-50%, -50%) rotate(-14deg) scale(0); pointer-events: none; }
+  /* Captured: holo border, sparkle, desaturated monster. */
+  .mon.is-caught .mon__front { border: 3px solid transparent; background: linear-gradient(170deg, #2a2030, #1a1220) padding-box, conic-gradient(from var(--holo), #ff8fb1, #ffd23f, #6fe3b4, #46b3ff, #b8a8ff, #ff8fb1) border-box; animation: holo 4s linear infinite; }
+  @keyframes holo { to { --holo: 360deg; } }
+  .mon.is-caught .mon__art img { filter: saturate(.5) drop-shadow(0 12px 18px rgba(0, 0, 0, .5)); }
+  .mon.is-caught .mon__stamp { transform: translate(-50%, -50%) rotate(-14deg) scale(1); }
+  .mon.is-caught .mon__front::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .14) 45%, transparent 60%) -100% 0 / 250% 100% no-repeat; animation: shine 3.2s ease-in-out infinite; }
+  @keyframes shine { 60%, 100% { background-position: 150% 0; } }
+
+  .mon__bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; letter-spacing: .16em; color: #ff9d8a; }
+  .mon__flee { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1.5px solid rgba(251, 248, 241, .3); border-radius: 50%; background: none; font-size: 13px; }
+  .mon__task { margin: 2px 0 8px; font-size: 14px; font-weight: 700; line-height: 1.4; }
+  .g { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+  .g__log { margin: auto 0 0; padding: 8px 10px; border-radius: 10px; background: rgba(0, 0, 0, .4); font-size: 11.5px; line-height: 1.45; color: #9cf0d0; min-height: 3.2em; }
+  .g__log.is-bad { color: #ff9a8a; }
+
+  /* Failover */
+  .pg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .pg__node { position: relative; display: grid; justify-items: center; gap: 4px; padding: 12px 4px 10px; border: 1.5px solid rgba(251, 248, 241, .2); border-radius: 12px; background: rgba(255, 255, 255, .04); transition: background .2s, border-color .2s, opacity .3s, transform .2s var(--ease-out); }
+  .pg__node:hover { transform: translateY(-2px); border-color: rgba(251, 248, 241, .5); }
+  .pg__node b { font-size: 13px; }
+  .pg__node span { font-size: 10px; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+  .pg__db { width: 34px; height: 40px; border-radius: 50% / 18%; background: linear-gradient(#46b3ff, #1f6fb0); box-shadow: inset 0 6px 0 rgba(255, 255, 255, .35); }
+  .pg__node.is-primary { border-color: var(--yellow); background: rgba(255, 210, 63, .1); }
+  .pg__node.is-primary::before { content: '★'; position: absolute; top: 4px; right: 8px; color: var(--yellow); font-size: 13px; }
+  .pg__node.is-primary .pg__db { background: linear-gradient(#ffd23f, #c98a1e); }
+  .pg__node.is-down { opacity: .35; transform: none; }
+  .pg__node.is-down .pg__db { background: #444; box-shadow: none; }
+  .pg__node.is-down::after { content: '✕'; position: absolute; top: 18px; font-size: 28px; color: var(--red); font-weight: 900; }
+
+  /* Cache */
+  .map { width: 100%; height: auto; border-radius: 12px; background: radial-gradient(ellipse at 50% 60%, rgba(70, 179, 255, .12), transparent 70%), rgba(0, 0, 0, .3); }
+  .map__route { fill: none; stroke: rgba(251, 248, 241, .25); stroke-width: 2; stroke-dasharray: 4 5; }
+  .map__route--near { stroke: rgba(111, 227, 180, .7); opacity: 0; transition: opacity .3s; }
+  .g--cache.is-warm .map__route--near { opacity: 1; }
+  .map__node { fill: #2a2533; stroke: var(--paper); stroke-width: 2; }
+  .map__node--you { fill: var(--yellow); }
+  .map__node--edge { transition: fill .3s; }
+  .g--cache.is-warm .map__node--edge { fill: #6fe3b4; }
+  .map__node--origin { fill: #b8a8ff; }
+  .map text { fill: rgba(251, 248, 241, .7); font: 10px var(--f-mono); }
+  .map__pkt { fill: #fff; opacity: 0; filter: drop-shadow(0 0 4px #fff); }
+
+  /* SQL */
+  .chat { display: flex; flex-direction: column; gap: 6px; max-height: 170px; overflow: auto; }
+  .chat p { margin: 0; padding: 6px 9px; border-radius: 10px; font-size: 12.5px; line-height: 1.4; max-width: 92%; }
+  .chat .q { align-self: flex-end; background: var(--yellow); color: var(--ink); font-weight: 700; }
+  .chat .a { align-self: flex-start; background: rgba(0, 0, 0, .45); color: #9cf0d0; font-family: var(--f-mono); font-size: 11px; white-space: pre-wrap; }
+  .chat .no { align-self: flex-start; background: rgba(229, 50, 45, .2); color: #ffb3a8; font-weight: 700; box-shadow: inset 0 0 0 1.5px var(--red); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .chip-q { padding: 6px 10px; border: 1.5px solid rgba(251, 248, 241, .3); border-radius: 99px; background: none; font-size: 12px; text-align: left; transition: background .2s, border-color .2s; }
+  .chip-q:hover { background: rgba(255, 255, 255, .08); }
+  .chip-q.is-reckless { border-color: rgba(229, 50, 45, .7); color: #ffb3a8; }
+  .chip-q.is-hint { animation: nudge 1s ease-in-out infinite; }
+  @keyframes nudge { 50% { transform: translateX(4px); } }
+
+  /* Palette */
+  .pal { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1.5px solid rgba(251, 248, 241, .35); border-radius: 10px; background: rgba(0, 0, 0, .4); }
+  .pal__k { padding: 2px 6px; border-radius: 5px; background: rgba(255, 255, 255, .12); font-size: 11px; }
+  .pal__in { flex: 1; min-width: 0; border: 0; background: none; outline: none; font-family: var(--f-mono); font-size: 13px; color: var(--paper); }
+  .pal__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; }
+  .pal__list li { padding: 6px 8px; border-radius: 8px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pal__list li[aria-selected="true"], .pal__list li:hover { background: rgba(70, 179, 255, .2); }
+  .pal__list mark { background: none; color: var(--yellow); }
+
+  .dex__done { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 26px 0 0; opacity: 0; transform: translateY(20px); }
+  .dex__done.is-on { opacity: 1; transform: none; transition: opacity .5s, transform .6s var(--ease-out); }
+  .dex__ok { width: 90px; aspect-ratio: 4 / 5; }
+  .dex__ok .art, .dex__ok img { width: 100%; height: 100%; object-fit: contain; }
+  .dex__done p { margin: 0; font-size: 16px; }
+  .dex__done b { font-family: var(--f-display); font-weight: 400; font-size: 28px; color: var(--yellow); margin-right: 6px; }
+
+  .cross { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "k k" "big h" "big txt"; gap: 4px 24px; align-items: center; margin-top: 28px; padding: 20px 24px; border: 2px solid rgba(120, 170, 255, .5); border-radius: 18px; background: linear-gradient(120deg, rgba(56, 120, 255, .24), rgba(255, 255, 255, .03)); }
+  .cross__k { grid-area: k; margin: 0; font-size: 11px; letter-spacing: .2em; color: #9ec1ff; }
+  .cross__h { grid-area: h; margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 22px; }
+  .cross__big { grid-area: big; margin: 0; font-family: var(--f-display); font-size: clamp(54px, 6vw, 88px); line-height: 1; color: var(--yellow); }
+  .cross__txt { grid-area: txt; margin: 0; font-size: 14.5px; opacity: .9; }
+  .cross code { font-family: var(--f-mono); color: var(--yellow); }
+
+  @media (max-width: 1100px) { .mons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) {
+    .mons { grid-template-columns: 1fr; }
+    .mon { min-height: 0; }
+    .mon__art { width: 70%; margin: 0 auto; }
+    .cross { grid-template-columns: 1fr; grid-template-areas: "k" "h" "big" "txt"; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mon__inner { transition: none; }
+    .mon.is-caught .mon__front, .mon.is-caught .mon__front::after { animation: none; }
+    .chip-q.is-hint { animation: none; }
+  }
+</style>

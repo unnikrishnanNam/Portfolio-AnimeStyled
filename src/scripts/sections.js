@@ -8,6 +8,7 @@ import { playCold } from './coldopen.js';
 import { play as sfx } from './sfx.js';
 import { burstAt } from './burst.js';
 import { initDojo } from './dojo.js';
+import { initBestiary } from './bestiary.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -253,14 +254,9 @@ function initBattle(mm) {
 
   $$('[data-fight-jump]', sec).forEach((a, i) => a.addEventListener('click', (e) => { e.preventDefault(); jumpTo(i); }));
 
-  // Bestiary: one click each, then a deadpan "OK."
-  $$('[data-oneclick]', sec).forEach((b) => b.addEventListener('click', () => {
-    const card = b.closest('.beast');
-    const on = !card.classList.contains('is-flat');
-    card.classList.toggle('is-flat', on);
-    b.textContent = on ? 'Respawn' : 'One-click fix';
-    if (on) { sfx('impact'); fx.jolt(card, 6); }
-  }));
+  // Bestiary: four mini-games under the battle track.
+  initBestiary();
+  if (!reduced) gsap.from('.mon', { y: 60, opacity: 0, rotation: (i) => (i % 2 ? 3 : -3), stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.mons', start: 'top 85%' } });
 }
 
 // ── EP.04 Journey: horizontal walk, the wheel keeps time ──

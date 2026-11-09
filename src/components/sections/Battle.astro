@@ -1,7 +1,8 @@
 ---
 import Art from '../Art.astro';
 import EpisodeCard from '../EpisodeCard.astro';
-import { bosses, finalBoss, bestiary } from '../../data/content.js';
+import Bestiary from './Bestiary.astro';
+import { bosses, finalBoss } from '../../data/content.js';
 ---
 <section class="sc battle on-dark" id="ep03" data-ep="ep03" data-fx="powerup" aria-labelledby="battle-h">
   <div class="wrap battle__intro">
@@ -163,35 +164,10 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
           </div>
         </div>
       </article>
-
-      <article class="fight fight--bestiary" id="bestiary" data-fansub="Smaller monsters. One click each.">
-        <header class="fight__top">
-          <p class="fight__no mono">BESTIARY · SIDE QUESTS</p>
-        </header>
-        <div class="beasts">
-          {bestiary.map((m) => (
-            <div class="beast">
-              <div class="beast__art"><Art id={m.art} sizes="200px" alt={m.name} label={m.name} /></div>
-              <h4>{m.name}</h4>
-              <p class="beast__proj mono">{m.project}</p>
-              <p class="beast__txt">{m.text}</p>
-              <div class="beast__foot">
-                <button class="btn btn--sm" type="button" data-oneclick>One-click fix</button>
-                {m.repo && <a class="beast__repo mono" href={m.repo} target="_blank" rel="noopener">repo ↗</a>}
-              </div>
-              <span class="beast__ok" aria-hidden="true"><Art id="CH-08" sizes="120px" alt="" label="deadpan OK face" /><b>OK.</b></span>
-            </div>
-          ))}
-          <div class="beast beast--cross">
-            <p class="beast__proj mono">CROSSOVER EPISODE · JAN – FEB 2026</p>
-            <h4>Whatomate × Zerodha</h4>
-            <p class="beast__big">−50%</p>
-            <p class="beast__txt">DB queries per webhook event, after refactoring the campaign-status hot path in Go to use PostgreSQL’s <code>RETURNING</code>. Merged under Zerodha’s code review.</p>
-          </div>
-        </div>
-      </article>
     </div>
   </div>
+
+  <Bestiary />
 </section>
 
 <style is:global>
@@ -310,27 +286,6 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
   .rp__ok { font-family: var(--f-display); font-size: 22px; color: var(--paper); opacity: 0; transform: scale(.6); transition: opacity .2s, transform .3s var(--ease-out); }
   .rp__ok.is-on { opacity: 1; transform: scale(1); }
 
-  .fight--bestiary .fight__top { margin-bottom: 4px; }
-  .beasts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
-  .beast { position: relative; display: grid; align-content: start; gap: 6px; padding: 14px; border: 2px solid rgba(251, 248, 241, .22); border-radius: 16px; background: rgba(255, 255, 255, .04); overflow: hidden; }
-  .beast__art { aspect-ratio: 1; transform-origin: 50% 100%; }
-  .beast__art .art, .beast__art img { width: 100%; height: 100%; }
-  .beast__art img { object-fit: contain; }
-  .beast__art .art--todo { min-height: 0; }
-  .beast h4 { margin: 6px 0 0; font-family: var(--f-display); font-weight: 400; font-size: 17px; line-height: 1.15; }
-  .beast__proj { margin: 0; font-size: 11px; letter-spacing: .14em; color: #ff9d8a; text-transform: uppercase; }
-  .beast__txt { margin: 0; font-size: 13.5px; line-height: 1.45; opacity: .85; }
-  .beast__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 6px; }
-  .beast__foot > * { white-space: nowrap; }
-  .beast__repo { font-size: 11px; opacity: .7; }
-  .beast__ok { position: absolute; inset: 14px 14px auto; aspect-ratio: 1; display: grid; place-items: center; opacity: 0; pointer-events: none; }
-  .beast__ok .art { position: absolute; inset: 0; } .beast__ok .art img { width: 100%; height: 100%; object-fit: contain; }
-  .beast__ok b { position: absolute; right: 0; bottom: 4%; transform: rotate(-8deg); font-family: var(--f-display); font-size: 30px; color: var(--paper); -webkit-text-stroke: 4px var(--ink); paint-order: stroke fill; }
-  .beast.is-flat .beast__art { transform: scaleY(.08); opacity: .5; transition: transform .25s cubic-bezier(.5, 0, .9, .4), opacity .4s .2s; }
-  .beast.is-flat .beast__ok { opacity: 1; transition: opacity .2s .25s; }
-  .beast--cross { background: linear-gradient(160deg, rgba(56, 120, 255, .22), rgba(255, 255, 255, .03)); border-color: rgba(120, 170, 255, .5); }
-  .beast__big { margin: 0; font-family: var(--f-display); font-size: clamp(44px, 4.4vw, 64px); line-height: 1; color: var(--yellow); }
-  .beast code { font-family: var(--f-mono); font-size: .92em; color: var(--yellow); }
 
   /* Horizontal mode (desktop, set by battle.js) */
   .battle.is-h .battle__pin { height: 100vh; overflow: hidden; }
@@ -339,14 +294,11 @@ import { bosses, finalBoss, bestiary } from '../../data/content.js';
   .battle.is-h .fight__body { min-height: 0; }
   .battle.is-h .fight__stage { min-height: 0; }
   .battle.is-h .fight__side { overflow: hidden; }
-  .battle.is-h .fight--bestiary { align-content: center; grid-template-rows: auto auto; }
 
   @media (max-width: 1000px) {
     .roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .fight__body { grid-template-columns: 1fr; }
     .fight__stage { min-height: 0; aspect-ratio: 4 / 3.4; }
-    .beasts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .beast--cross { grid-column: 1 / -1; }
   }
   @media (max-width: 560px) {
     .hp { grid-template-columns: 1fr auto; }

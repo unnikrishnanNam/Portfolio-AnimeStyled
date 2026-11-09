@@ -119,11 +119,12 @@ export const finalBoss = {
   repo: 'https://github.com/unnikrishnanNam/opscope',
 };
 
+// Bestiary: each side quest is a small monster with its own mini-game (`game`), themed on what the project does.
 export const bestiary = [
-  { art: 'MINI-01', name: 'The Failover Kraken', project: 'CNPG HA Lab', text: 'A 3-instance CloudNativePG cluster on a hand-built kubeadm cluster, with WAL archiving and PITR.' },
-  { art: 'MINI-02', name: 'The Distance Wyrm', project: 'VergeCDN', text: 'A self-hostable multi-node CDN with a Redis edge cache and socket invalidation.', repo: 'https://github.com/unnikrishnanNam/Verge-CDN' },
-  { art: 'MINI-03', name: 'The SQL Gremlin', project: 'DataClerk', text: 'Ask your database questions in plain language. Read-only by design.', repo: 'https://github.com/unnikrishnanNam/Data-Agent-Lite' },
-  { art: 'MINI-04', name: 'The Folder Maze', project: 'Xplore', text: 'A developer file explorer with a terminal, SSH and a command palette.', repo: 'https://github.com/unnikrishnanNam/xplore-v2' },
+  { art: 'MINI-01', name: 'The Failover Kraken', project: 'CNPG HA Lab', game: 'failover', text: 'A 3-instance CloudNativePG cluster on a hand-built kubeadm cluster, with WAL archiving and PITR.', task: 'It hoards the primary. Take the primary down and see if the cluster holds.', win: 'Primary lost, replica promoted, writes back. The Kraken lets go.' },
+  { art: 'MINI-02', name: 'The Distance Wyrm', project: 'VergeCDN', game: 'cache', text: 'A self-hostable multi-node CDN with a Redis edge cache and socket invalidation.', repo: 'https://github.com/unnikrishnanNam/Verge-CDN', task: 'It stretches every request across the world. Request the file twice.', win: 'Second request served from the nearest edge. The Wyrm shrinks.' },
+  { art: 'MINI-03', name: 'The SQL Gremlin', project: 'DataClerk', game: 'sql', text: 'Ask your database questions in plain language. Read-only by design.', repo: 'https://github.com/unnikrishnanNam/Data-Agent-Lite', task: 'Ask it anything. It wants you to try something reckless.', win: 'Refused. Read-only by design. The Gremlin sulks.' },
+  { art: 'MINI-04', name: 'The Folder Maze', project: 'Xplore', game: 'palette', text: 'A developer file explorer with a terminal, SSH and a command palette.', repo: 'https://github.com/unnikrishnanNam/xplore-v2', task: 'muffins.png is lost somewhere inside. Find it with the palette.', win: 'Found in one jump. The maze straightens out.' },
 ];
 
 // Wheel of time: 8 spokes, 8 chapters, in date order.
