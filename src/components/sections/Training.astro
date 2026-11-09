@@ -1,146 +1,314 @@
 ---
+// EP.02 Training arc: night training to sunrise.
+// 1. A pinned training montage that counts the daily reps up.
+// 2. Breathing Forms: hold a seal to breathe in, release in the gold band to strike.
+// 3. Final selection: the CKA stamp, then the licence scroll.
 import Art from '../Art.astro';
 import EpisodeCard from '../EpisodeCard.astro';
+import media from '../../data/media.json';
 import { routine, skills, licenses, protocols } from '../../data/content.js';
+
+const lib = media as Record<string, any>;
+const hasDawn = !!lib['BG-04b'];
+const hasStrike = !!lib['GIF-10'];
 ---
 <section class="sc training on-dark" id="ep02" data-ep="ep02" data-fx="screentone" aria-labelledby="training-h">
-  <div class="training__bg" aria-hidden="true"><Art id="BG-04" sizes="100vw" alt="" label="server-rack dojo" /></div>
-  <div class="wrap">
-    <EpisodeCard ep="ep02" dark />
-
-    <ol class="routine" aria-label="Daily training routine" data-fansub="Every single day. Even on weekends.">
-      {routine.map((r) => <li>{r}</li>)}
-    </ol>
-
-    <div class="status" id="training-h" data-fansub="Rank S in Kubernetes. Rank ??? in Swift.">
-      <div class="status__win">
-        <header class="status__head">
-          <span class="mono">STATUS</span>
-          <h3>unnikrishnan</h3>
-          <dl class="status__meta">
-            <div><dt>Class</dt><dd>Platform Engineer</dd></div>
-            <div><dt>Guild</dt><dd>Kalkitech · Energy IoT</dd></div>
-            <div><dt>Sidekick</dt><dd>Muffins (Shih Tzu)</dd></div>
-          </dl>
-        </header>
-        <div class="status__cols">
-          <ul class="tech" aria-label="Techniques">
-            <li class="tech__head mono" aria-hidden="true"><span>TECHNIQUE</span><span>RANK</span></li>
-            {skills.map((s) => (
-              <li>
-                <button class="tech__row" type="button" data-form={s.form} data-loop={s.loop} data-rank={s.rank} aria-describedby="form-live">
-                  <span class="tech__name">{s.name}</span>
-                  <span class="tech__bar" aria-hidden="true"><i style={`--lv:${s.level}`}></i></span>
-                  <span class:list={['tech__rank', { 'is-q': s.rank === '???' }]}>{s.rank}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div class="status__side">
-            <div class="loopbox" aria-live="polite">
-              <div class="loopbox__item is-on" data-loopbox="GIF-03"><Art id="GIF-03" sizes="320px" alt="Our hero typing furiously on the MacBook" label="furious typing loop" /></div>
-              <div class="loopbox__item" data-loopbox="R-01"><Art id="R-01" sizes="320px" alt="Our hero, confused, eyes turning into spirals" /></div>
-              <p class="loopbox__cap mono">hover a technique</p>
-            </div>
-          </div>
-        </div>
-        <div class="status__row">
-          <h4 class="mono">LICENSES</h4>
-          <ul class="licenses">
-            {licenses.map((l) => (
-              <li class:list={['lic', `lic--${l.state}`]} data-lic={l.name}>
-                <b>{l.name}</b><span>{l.note}</span>
-                {l.state === 'charging' && <i class="lic__charge" aria-hidden="true"></i>}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div class="status__row">
-          <h4 class="mono">LANGUAGES KNOWN</h4>
-          <p class="status__langs">Java, Go, TypeScript, Python, SQL, Kotlin. And, at work, the dialects of the power grid: {protocols.map((p, i) => <><span class="chip">{p}</span>{i < protocols.length - 1 ? ' ' : ''}</>)}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="cka" aria-label="CKA passed">
-      <p class="cka__pre mono">FINAL EXAM · CERTIFIED KUBERNETES ADMINISTRATOR</p>
-      <div class="cka__stamp" data-cka><span>CKA</span><small>PASSED · 2026</small></div>
+  <div class="training__sky" aria-hidden="true">
+    <div class="training__view">
+      <div class="training__bg"><Art id="BG-04" sizes="100vw" alt="" label="server-rack dojo" /></div>
+      {hasDawn && <div class="training__bg training__bg--dawn"><Art id="BG-04b" sizes="100vw" alt="" /></div>}
+      <i class="training__sun"></i>
+      <i class="training__dawn"></i>
     </div>
   </div>
-  <div class="form-flash" id="form-flash" aria-hidden="true"><p></p></div>
-  <p class="sr-only" id="form-live" aria-live="polite"></p>
+
+  <div class="wrap">
+    <EpisodeCard ep="ep02" dark />
+  </div>
+
+  <!-- 1. Training montage -->
+  <div class="montage" data-montage data-fansub="Every single day. Even on weekends.">
+    <div class="wrap montage__stage">
+      <div class="montage__copy">
+        <p class="montage__day mono" aria-hidden="true">DAY <b data-day>365</b></p>
+        <ol class="reps" aria-label="Daily training routine">
+          {routine.map((r) => (
+            <li class="rep">
+              <b class="rep__n" data-to={r.n}>{r.n}</b>
+              <span class="rep__what">{r.unit && <em class="rep__u">{r.unit} </em>}{r.what}<i class="rep__ok mono" aria-hidden="true">CLEAR</i></span>
+            </li>
+          ))}
+        </ol>
+        <p class="montage__every">Every single day.</p>
+      </div>
+      <div class="montage__hero" aria-hidden="true">
+        <div class="montage__lines speedlines"></div>
+        <div class="montage__art"><Art id="GIF-03" sizes="(max-width: 900px) 70vw, 34vw" alt="" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Breathing forms -->
+  <div class="wrap forms" data-fansub="Hold a seal. Breathe in. Strike.">
+    <header class="forms__head">
+      <p class="forms__k mono">BREATHING FORMS</p>
+      <h3 class="forms__h" id="training-h">Hold a seal to breathe in.<br />Let go in the gold to strike.</h3>
+    </header>
+
+    <div class="dojo">
+      <div class="dojo__stage">
+        <canvas class="dojo__ink" aria-hidden="true"></canvas>
+        <svg class="dojo__ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="ring__track" cx="50" cy="50" r="46" pathLength="100" />
+          <circle class="ring__gold" cx="50" cy="50" r="46" pathLength="100" />
+          <circle class="ring__fill" cx="50" cy="50" r="46" pathLength="100" />
+        </svg>
+        <div class="dojo__hero" aria-hidden="true">
+          <div class="pose pose--stance is-on"><Art id="GIF-09" fallback="CH-04" sizes="(max-width: 900px) 60vw, 26vw" alt="" /></div>
+          {hasStrike && <div class="pose pose--strike"><Art id="GIF-10" sizes="(max-width: 900px) 60vw, 26vw" alt="" /></div>}
+        </div>
+        <div class="dojo__inset" aria-hidden="true"><Art id="R-01" sizes="200px" alt="" /></div>
+        <svg class="dojo__slash" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <filter id="brush-edge" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.035 0.6" numOctaves="2" seed="7" result="n" />
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="18" />
+            </filter>
+          </defs>
+          <path class="slash__main" pathLength="1" d="" filter="url(#brush-edge)" />
+          <path class="slash__core" pathLength="1" d="" />
+        </svg>
+        <div class="dojo__title" aria-hidden="true">
+          <span class="dojo__num" lang="ja"></span>
+          <span class="dojo__style mono"></span>
+          <span class="dojo__move"></span>
+        </div>
+        <p class="dojo__grade mono" aria-hidden="true"></p>
+        <div class="dojo__stamp" aria-hidden="true"><span></span></div>
+        <p class="dojo__hint mono" aria-hidden="true">HOLD A SEAL</p>
+      </div>
+
+      <div class="scrolls">
+        <article class="scroll is-on" data-scroll="intro">
+          <p class="scroll__k mono">TRAINING SCROLL</p>
+          <h4>Six forms. One is unfinished.</h4>
+          <p>Hold a seal below, or focus one and hold Space. Let go when the ring reaches the gold band for a perfect form. Each form unrolls what it was trained on.</p>
+        </article>
+        {skills.map((s, i) => (
+          <article class="scroll" data-scroll={i} style={`--el:${s.color}`}>
+            <header class="scroll__head">
+              <span class="scroll__kanji" lang="ja" aria-hidden="true">{s.kanji}</span>
+              <div>
+                <p class="scroll__k mono">{s.style}</p>
+                <h4>{s.name}</h4>
+              </div>
+              <span class="scroll__rank" aria-label={`Rank ${s.rank}`}>{s.rank}</span>
+            </header>
+            <p class="scroll__move"><span lang="ja">{s.num}</span> {s.move}</p>
+            <ul>{s.proof.map((p) => <li>{p}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+
+      <ol class="seals" aria-label="Breathing forms">
+        {skills.map((s, i) => (
+          <li>
+            <button class="seal" type="button" data-seal={i} data-el={s.el} data-color={s.color} data-num={s.num} data-style={s.style} data-move={s.move} data-rank={s.rank}
+              style={`--el:${s.color}`} aria-label={`${s.name}, rank ${s.rank}. Hold to perform ${s.move}.`}>
+              <span class="seal__k" lang="ja" aria-hidden="true">{s.kanji}</span>
+              <span class="seal__name">{s.name}</span>
+              <span class="seal__rank" aria-hidden="true">{s.rank}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p class="forms__count mono" aria-live="polite">FORMS PERFORMED <b data-forms-count>0</b> / {skills.length}</p>
+      <p class="sr-only" data-forms-live aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- 3. Final selection -->
+  <div class="wrap grad" data-grad>
+    <p class="grad__pre mono">FINAL SELECTION · CERTIFIED KUBERNETES ADMINISTRATOR</p>
+    <div class="grad__stage">
+      <i class="grad__sun" aria-hidden="true"></i>
+      <svg class="grad__slash" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M-30 250 C 260 210, 640 110, 1030 40" /></svg>
+      <svg class="grad__splat" viewBox="0 0 200 200" aria-hidden="true"><path d="M100 18c14 0 18 22 30 24s30-14 38-2-12 26-6 38 30 14 26 28-28 6-36 16 2 34-12 40-20-18-36-18-28 26-40 18 2-30-8-40-38-4-40-18 26-18 26-32-24-22-14-32 30 8 40-2 14-22 32-22z" /></svg>
+      <div class="cka__stamp" data-cka aria-label="CKA passed, 2026"><span>CKA</span><small>PASSED · 2026</small></div>
+    </div>
+    <div class="grad__scroll">
+      <ul class="lics" aria-label="Licences">
+        {licenses.map((l) => (
+          <li class:list={['lic', `lic--${l.state}`]}>
+            <span class="lic__seal">{l.name}</span>
+            <span class="lic__note">{l.note}</span>
+            {l.state === 'charging' && <i class="lic__charge" aria-hidden="true"></i>}
+          </li>
+        ))}
+      </ul>
+      <p class="grad__langs"><b>Languages known:</b> Java, Go, TypeScript, Python, SQL, Kotlin. And, at work, the dialects of the power grid: {protocols.map((p, i) => <><span class="chip">{p}</span>{i < protocols.length - 1 ? ' ' : ''}</>)}</p>
+    </div>
+  </div>
 </section>
 
 <style is:global>
-  .training { background: #0f1214; color: var(--paper); padding-bottom: clamp(120px, 22vh, 240px); --accent: var(--yellow); }
-  .training__bg { position: absolute; inset: 0; opacity: .38; }
+  /* ── Frame: night at the top, sunrise by the CKA stamp ── */
+  .training { --dawn: 0; background: linear-gradient(180deg, #090b16 0%, #0d1020 45%, #1d1530 72%, #3a1f33 90%, #120c10 100%); color: var(--paper); padding-bottom: clamp(100px, 18vh, 200px); --accent: var(--yellow); }
+  .training__sky { position: absolute; inset: 0; pointer-events: none; }
+  .training__view { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .training__bg { position: absolute; inset: 0; opacity: calc(.2 + var(--dawn) * .16); }
   .training__bg .art, .training__bg img { width: 100%; height: 100%; }
-  .training__bg .art:not(.art--todo) { position: sticky; top: 0; height: 100vh; height: 100svh; }
-  .training__bg img { object-fit: cover; object-position: 50% 60%; }
-  .training__bg .art--todo { border: 0; border-radius: 0; background: linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 80px 100%, linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 100% 40px, radial-gradient(ellipse at 50% 0, #1d3a30, transparent 70%); }
-  .training__bg .art--todo span { position: absolute; top: 16px; right: 16px; }
-  .training::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(#0f1214 0, transparent 30%, transparent 70%, #0f1214 100%); }
-  .training .wrap { position: relative; z-index: 1; }
+  .training__bg img { object-fit: cover; object-position: 50% 60%; filter: saturate(.75) brightness(.7); }
+  .training__view::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 30%, rgba(6, 8, 18, .7) 100%); }
+  .training__bg--dawn { opacity: calc(var(--dawn) * .5); }
+  .training__bg .art--todo { border: 0; border-radius: 0; background: radial-gradient(ellipse at 50% 0, #1d3a30, transparent 70%); }
+  .training__bg .art--todo span { display: none; }
+  .training__dawn { position: absolute; inset: 0; opacity: var(--dawn); background: linear-gradient(180deg, transparent 20%, rgba(255, 120, 90, .28) 70%, rgba(255, 190, 110, .5)); mix-blend-mode: screen; }
+  .training__sun { position: absolute; left: 50%; bottom: -18vmin; width: 60vmin; aspect-ratio: 1; margin-left: -30vmin; border-radius: 50%; opacity: var(--dawn); transform: translateY(calc((1 - var(--dawn)) * 40vh)); background: radial-gradient(circle, #ffe9a8 0 34%, rgba(255, 170, 90, .55) 52%, transparent 70%); filter: blur(2px); }
+  .training::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(#090b16 0, transparent 14%, transparent 88%, #120c10 100%); }
+  .training > .wrap, .training > .montage { position: relative; z-index: 1; }
 
-  .routine { list-style: none; margin: 0 0 clamp(60px, 10vh, 120px); padding: 0; display: grid; gap: .1em; font-family: var(--f-display); font-size: clamp(28px, 5.2vw, 84px); line-height: 1.04; text-transform: uppercase; }
-  .routine li:nth-child(odd) { color: var(--yellow); }
-  .routine li:last-child { color: var(--paper); font-size: .5em; letter-spacing: .1em; padding-top: .4em; }
+  /* ── 1. Montage ── */
+  .montage { position: relative; z-index: 1; }
+  .montage__stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: clamp(20px, 4vw, 60px); padding-block: clamp(20px, 6vh, 60px); }
+  .training.is-pinned .montage__stage { height: 100vh; height: 100svh; padding-block: 70px 40px; }
+  .montage__day { margin: 0 0 14px; font-size: 13px; letter-spacing: .3em; color: #9cf0d0; }
+  .montage__day b { display: inline-block; min-width: 3ch; font-size: 1.6em; color: var(--paper); font-variant-numeric: tabular-nums; }
+  .reps { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(2px, .8vh, 10px); }
+  .rep { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 0 .35em; text-transform: uppercase; font-family: var(--f-display); line-height: 1; }
+  .rep__n { min-width: 2.15ch; text-align: right; font-weight: 400; font-size: clamp(44px, 6.2vw, 104px); color: var(--yellow); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink); font-variant-numeric: tabular-nums; }
+  .rep:nth-child(even) .rep__n { color: #ff8fb1; }
+  .rep__u { font-style: normal; color: var(--yellow); }
+  .rep__what { font-size: clamp(18px, 2.2vw, 36px); color: var(--paper); }
+  .rep__ok { display: inline-block; margin-left: .7em; vertical-align: .3em; padding: 3px 8px; font-style: normal; border: 2px solid var(--red); border-radius: 4px; color: var(--red); font-size: 12px; letter-spacing: .2em; transform: rotate(-8deg); opacity: 0; }
+  .montage__every { margin: clamp(14px, 3vh, 30px) 0 0; font-family: var(--f-display); font-size: clamp(22px, 3vw, 46px); text-transform: uppercase; letter-spacing: .04em; color: var(--paper); }
+  .montage__hero { position: relative; justify-self: center; width: min(100%, 520px); aspect-ratio: 1; }
+  .montage__lines { position: absolute; inset: -18%; color: rgba(156, 240, 208, .35); animation: spin 26s linear infinite; }
+  .montage__art { position: absolute; inset: 6%; border-radius: 50%; overflow: hidden; border: 4px solid var(--paper); background: radial-gradient(circle, #1f3c35, #0b1513 70%); box-shadow: 0 0 0 10px rgba(156, 240, 208, .12), 0 30px 80px rgba(0, 0, 0, .5); }
+  .montage__art .art, .montage__art img { width: 100%; height: 100%; }
+  .montage__art img { object-fit: cover; object-position: 50% 30%; }
+  /* Before the montage plays, rows wait dimmed (JS adds .is-armed). */
+  .montage.is-armed .rep { opacity: .16; }
+  .montage.is-armed .montage__every { opacity: 0; }
 
-  .status__win { position: relative; padding: clamp(18px, 3vw, 36px); border: 2px solid rgba(160, 240, 210, .55); border-radius: 18px; background: linear-gradient(160deg, rgba(20, 60, 52, .72), rgba(8, 18, 20, .86)); box-shadow: 0 0 0 6px rgba(160, 240, 210, .08), 0 30px 80px rgba(0, 0, 0, .45), inset 0 0 60px rgba(120, 255, 210, .06); backdrop-filter: blur(6px); }
-  .status__win::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(160, 240, 210, .2); border-radius: 12px; pointer-events: none; }
-  .status__head { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 4px 16px; padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px dashed rgba(160, 240, 210, .35); }
-  .status__head > span { color: #9cf0d0; letter-spacing: .3em; font-size: 12px; }
-  .status__head h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(24px, 3vw, 40px); }
-  .status__meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 6px 0 0; font-size: 14px; }
-  .status__meta div { display: flex; gap: 8px; }
-  .status__meta dt { color: #9cf0d0; }
-  .status__meta dd { margin: 0; font-weight: 700; }
-  .status__cols { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr); gap: clamp(16px, 3vw, 40px); }
-  .tech { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .tech__head { display: flex; justify-content: space-between; padding: 0 12px 6px; font-size: 11px; letter-spacing: .25em; color: #9cf0d0; }
-  .tech__row { width: 100%; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 3.2em; align-items: center; gap: 14px; padding: 10px 12px; border: 1px solid transparent; border-radius: 10px; background: none; text-align: left; transition: background .2s, border-color .2s; }
-  .tech__row:hover, .tech__row:focus-visible { background: rgba(160, 240, 210, .08); border-color: rgba(160, 240, 210, .35); }
-  .tech__name { font-weight: 700; }
-  .tech__bar { height: 10px; border-radius: 99px; background: rgba(255, 255, 255, .1); overflow: hidden; }
-  .tech__bar i { display: block; height: 100%; width: calc(var(--lv) * 100%); border-radius: inherit; background: linear-gradient(90deg, #4fd1a5, var(--yellow)); transform-origin: left; }
-  .tech__rank { font-family: var(--f-display); font-size: 22px; text-align: center; color: var(--yellow); }
-  .tech__rank.is-q { color: #ff8e7a; font-size: 16px; }
-  .status__side { display: grid; align-content: start; }
-  .loopbox { position: relative; aspect-ratio: 9 / 8; border: 2px solid rgba(160, 240, 210, .45); border-radius: 14px; overflow: hidden; background: #071012; }
-  .loopbox__item { position: absolute; inset: 0; opacity: 0; transition: opacity .25s; }
-  .loopbox__item.is-on { opacity: 1; }
-  .loopbox__item .art, .loopbox__item img { width: 100%; height: 100%; }
-  .loopbox__item img { object-fit: cover; }
-  .loopbox__item .art--todo { border-radius: 0; border: 0; }
-  .loopbox__cap { position: absolute; left: 10px; bottom: 8px; margin: 0; padding: 3px 8px; border-radius: 6px; background: rgba(0, 0, 0, .6); font-size: 11px; color: #9cf0d0; }
-  .status__row { margin-top: 22px; padding-top: 18px; border-top: 1px dashed rgba(160, 240, 210, .35); }
-  .status__row h4 { margin: 0 0 12px; font-size: 11px; font-weight: 400; letter-spacing: .3em; color: #9cf0d0; }
-  .licenses { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .lic { position: relative; display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255, 255, 255, .25); overflow: hidden; }
-  .lic b { font-family: var(--f-display); font-weight: 400; font-size: 22px; }
-  .lic span { font-size: 12.5px; opacity: .8; }
-  .lic--gold { border-color: #f5c84b; background: linear-gradient(135deg, rgba(245, 200, 75, .28), rgba(201, 138, 62, .12)); box-shadow: 0 0 24px rgba(245, 200, 75, .25); }
-  .lic--gold b { color: #ffd76a; }
-  .lic--charging { border-style: dashed; }
-  .lic__charge { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: linear-gradient(90deg, transparent, #9cf0d0, transparent); animation: charge 1.8s linear infinite; }
-  @keyframes charge { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-  .status__langs { margin: 0; line-height: 2.1; }
-  .status__langs .chip { color: #9cf0d0; }
+  /* ── 2. Breathing forms ── */
+  .forms { position: relative; z-index: 1; margin-top: clamp(60px, 12vh, 140px); }
+  .forms__head { margin-bottom: clamp(18px, 3vh, 28px); }
+  .forms__k { margin: 0 0 8px; font-size: 12px; letter-spacing: .3em; color: #9cf0d0; }
+  .forms__h { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 50px); line-height: 1.08; }
+  .dojo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); grid-template-areas: "stage scroll" "seals seals" "count count"; gap: 16px; }
 
-  .cka { display: grid; justify-items: center; gap: 18px; margin-top: clamp(80px, 14vh, 160px); }
-  .cka__pre { margin: 0; font-size: 12px; letter-spacing: .25em; color: #9cf0d0; text-align: center; }
-  .cka__stamp { display: grid; place-items: center; width: clamp(180px, 22vw, 260px); aspect-ratio: 1; border-radius: 50%; border: 8px double #f5c84b; color: #ffd76a; background: radial-gradient(circle, rgba(245, 200, 75, .2), transparent 70%); transform: rotate(-12deg); }
+  .dojo__stage { --el: #46b3ff; grid-area: stage; position: relative; height: clamp(380px, 62vh, 620px); border: 2px solid rgba(251, 248, 241, .35); border-radius: 20px; overflow: hidden; isolation: isolate;
+    background:
+      radial-gradient(ellipse at 40% 55%, color-mix(in srgb, var(--el) 26%, transparent), transparent 62%),
+      repeating-conic-gradient(rgba(255, 255, 255, .025) 0 25%, transparent 0 50%) 0 0 / 56px 56px,
+      linear-gradient(180deg, rgba(8, 10, 22, .78), rgba(8, 10, 22, .92)); }
+  .dojo__stage::after { content: ''; position: absolute; inset: 0; z-index: 6; background: #fff; opacity: 0; pointer-events: none; transition: opacity .12s; }
+  .dojo__stage.is-flash::after { opacity: .5; transition: none; }
+  .dojo__ink { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
+  .dojo__ring { position: absolute; z-index: 2; left: 38%; top: 52%; width: min(78%, 74vh, 560px); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(-90deg); opacity: .35; transition: opacity .3s; pointer-events: none; overflow: visible; }
+  .dojo__ring circle { fill: none; stroke-width: 2.4; }
+  .ring__track { stroke: rgba(251, 248, 241, .18); }
+  .ring__gold { stroke: #ffd23f; stroke-dasharray: 17 83; stroke-dashoffset: -75; opacity: .55; }
+  .ring__fill { stroke: var(--el); stroke-width: 3.4; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; filter: drop-shadow(0 0 4px var(--el)); }
+  .dojo__stage.is-charging .dojo__ring { opacity: 1; }
+  .dojo__stage.is-gold .ring__gold { opacity: 1; filter: drop-shadow(0 0 6px #ffd23f); }
+  .dojo__hero { position: absolute; z-index: 3; left: 38%; bottom: 0; height: 92%; aspect-ratio: 1050 / 1403; transform: translateX(-50%); pointer-events: none; }
+  .pose { position: absolute; inset: 0; opacity: 0; }
+  .pose.is-on { opacity: 1; }
+  .pose .art, .pose img { width: 100%; height: 100%; }
+  .pose img { object-fit: contain; object-position: 50% 100%; filter: drop-shadow(0 0 0 transparent); transition: filter .3s; }
+  .dojo__stage.is-charging .pose img { filter: drop-shadow(0 0 18px var(--el)) drop-shadow(0 0 2px var(--el)); animation: breathe 1.2s ease-in-out infinite; }
+  @keyframes breathe { 50% { transform: scale(1.025, 1.035); } }
+  .dojo__inset { position: absolute; z-index: 5; left: 50%; top: 10%; width: clamp(110px, 16vw, 180px); aspect-ratio: 9 / 8; border: 3px solid var(--paper); border-radius: 6px; overflow: hidden; box-shadow: 6px 6px 0 rgba(0, 0, 0, .5); opacity: 0; transform: scale(.4) rotate(-8deg); pointer-events: none; }
+  .dojo__inset .art, .dojo__inset img { width: 100%; height: 100%; }
+  .dojo__inset img { object-fit: cover; }
+  .dojo__slash { position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .dojo__slash path { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  .slash__main { stroke: var(--el); stroke-width: 40; }
+  .slash__core { stroke: #fff; stroke-width: 9; }
+  .dojo__title { position: absolute; z-index: 5; right: clamp(14px, 3%, 28px); top: clamp(14px, 4%, 30px); display: grid; justify-items: end; text-align: right; max-width: 52%; opacity: 0; }
+  .dojo__num { font-family: var(--f-brush); font-size: clamp(40px, 5.4vw, 84px); line-height: 1; color: var(--paper); text-shadow: 0 0 22px var(--el), 3px 3px 0 #000; }
+  .dojo__style { margin-top: 6px; font-size: 11px; letter-spacing: .24em; color: var(--el); text-transform: uppercase; }
+  .dojo__move { font-family: var(--f-display); font-size: clamp(16px, 1.6vw, 24px); line-height: 1.15; }
+  .dojo__grade { position: absolute; z-index: 5; left: 50%; bottom: 14px; margin: 0; padding: 4px 10px; border-radius: 99px; background: rgba(0, 0, 0, .55); font-size: 12px; letter-spacing: .22em; transform: translateX(-50%); opacity: 0; white-space: nowrap; }
+  .dojo__grade[data-q="perfect"] { color: #ffd23f; box-shadow: 0 0 0 1.5px #ffd23f; }
+  .dojo__grade[data-q="shallow"], .dojo__grade[data-q="over"], .dojo__grade[data-q="fizzle"] { color: #ff9a8a; }
+  .dojo__stamp { position: absolute; z-index: 5; right: clamp(16px, 4%, 36px); bottom: clamp(16px, 6%, 40px); display: grid; place-items: center; min-width: clamp(70px, 8vw, 104px); height: clamp(70px, 8vw, 104px); padding: 0 12px; border: 5px solid var(--red); border-radius: 12px; background: rgba(229, 50, 45, .12); color: var(--red); font-family: var(--f-display); font-size: clamp(30px, 3.4vw, 50px); opacity: 0; transform: rotate(-10deg); }
+  .dojo__stamp span { line-height: 1; }
+  .dojo__hint { position: absolute; z-index: 5; left: 16px; top: 14px; margin: 0; font-size: 11px; letter-spacing: .3em; color: rgba(251, 248, 241, .6); }
+  .dojo__stage.is-gold .dojo__hint { color: #ffd23f; }
+
+  .scrolls { grid-area: scroll; position: relative; min-height: 300px; }
+  .scroll { position: absolute; inset: 0; display: none; padding: 26px 22px 22px; border-radius: 6px; color: var(--ink); background: linear-gradient(90deg, rgba(0, 0, 0, .04), transparent 8%, transparent 92%, rgba(0, 0, 0, .04)), #f4ecd8; box-shadow: 0 20px 50px rgba(0, 0, 0, .45); overflow: auto; }
+  .scroll::before, .scroll::after { content: ''; position: absolute; left: -8px; right: -8px; height: 12px; border-radius: 6px; background: linear-gradient(#6b4528, #3b2516); }
+  .scroll::before { top: -6px; } .scroll::after { bottom: -6px; }
+  .scroll.is-on { display: block; }
+  .scroll h4 { margin: 0 0 10px; font-family: var(--f-display); font-weight: 400; font-size: clamp(20px, 1.9vw, 28px); line-height: 1.1; }
+  .scroll p { margin: 0 0 10px; font-size: 15px; }
+  .scroll__k { margin: 0 0 4px !important; font-size: 11px !important; letter-spacing: .22em; color: #8a5a2b; text-transform: uppercase; }
+  .scroll__head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1.5px dashed rgba(22, 19, 28, .25); }
+  .scroll__head h4 { margin: 0; }
+  .scroll__kanji { display: grid; place-items: center; width: 52px; aspect-ratio: 1; border-radius: 50%; background: var(--ink); color: var(--el); font-family: var(--f-brush); font-size: 30px; line-height: 1; }
+  .scroll__rank { display: grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border: 3px solid var(--red); border-radius: 8px; color: var(--red); font-family: var(--f-display); font-size: 22px; transform: rotate(-8deg); }
+  .scroll__move { font-weight: 700; }
+  .scroll__move span { font-family: var(--f-brush); font-weight: 400; color: #8a5a2b; }
+  .scroll ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
+
+  .seals { grid-area: seals; list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .seal { position: relative; width: 100%; display: grid; justify-items: center; gap: 8px; padding: 12px 6px 14px; border: 0; border-radius: 16px; background: rgba(255, 255, 255, .04); color: var(--paper); touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: background .2s, transform .2s var(--ease-out); }
+  .seal:hover { background: rgba(255, 255, 255, .08); transform: translateY(-3px); }
+  .seal__k { position: relative; display: grid; place-items: center; width: clamp(54px, 5.4vw, 72px); aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--el); color: var(--el); font-family: var(--f-brush); font-size: clamp(26px, 2.6vw, 36px); line-height: 1; background: radial-gradient(circle, color-mix(in srgb, var(--el) 18%, transparent), transparent 70%); transition: transform .2s var(--ease-out), box-shadow .2s, background .2s, color .2s; }
+  .seal__name { font-size: 13px; font-weight: 700; text-align: center; line-height: 1.25; }
+  .seal__rank { position: absolute; top: 8px; right: 10px; font-family: var(--f-display); font-size: 13px; color: var(--yellow); }
+  .seal.is-holding .seal__k { transform: scale(.9); box-shadow: 0 0 0 6px color-mix(in srgb, var(--el) 30%, transparent), 0 0 30px var(--el); }
+  .seal.is-done .seal__k { background: var(--el); color: var(--ink); }
+  .seal.is-done::after { content: '✓'; position: absolute; left: calc(50% + 18px); top: 8px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 13px; font-weight: 900; }
+  .forms__count { grid-area: count; margin: 0; font-size: 12px; letter-spacing: .22em; color: #9cf0d0; text-align: center; }
+  .forms__count b { color: var(--paper); font-size: 1.3em; }
+
+  /* ── 3. Final selection ── */
+  .grad { position: relative; z-index: 1; margin-top: clamp(80px, 14vh, 160px); display: grid; justify-items: center; gap: 18px; }
+  .grad__pre { margin: 0; font-size: 12px; letter-spacing: .25em; color: #ffd9a0; text-align: center; }
+  .grad__stage { position: relative; display: grid; place-items: center; width: 100%; height: clamp(240px, 34vh, 340px); }
+  .grad__sun { --s: clamp(340px, 50vw, 720px); position: absolute; left: 50%; top: 50%; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(255, 236, 170, .9) 0 18%, rgba(255, 178, 96, .5) 38%, rgba(255, 120, 90, .18) 55%, transparent 70%); }
+  .grad__slash { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .grad__slash path { fill: none; stroke: #fff6dc; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; filter: drop-shadow(0 0 8px #ffd23f); }
+  .grad__splat { position: absolute; width: clamp(240px, 30vw, 380px); fill: rgba(229, 50, 45, .2); transform: scale(0); }
+  .cka__stamp { position: relative; display: grid; place-items: center; width: clamp(180px, 22vw, 260px); aspect-ratio: 1; border-radius: 50%; border: 8px double #f5c84b; color: #ffd76a; background: radial-gradient(circle, rgba(245, 200, 75, .22), rgba(10, 8, 20, .5) 70%); transform: rotate(-12deg); box-shadow: 0 0 60px rgba(255, 200, 90, .25); }
   .cka__stamp span { font-family: var(--f-display); font-size: clamp(56px, 7vw, 84px); line-height: 1; margin-top: 18%; }
   .cka__stamp small { font-family: var(--f-mono); font-size: 12px; letter-spacing: .2em; margin-bottom: 26%; }
+  .grad__scroll { position: relative; width: min(860px, 100%); margin-top: 18px; padding: 26px clamp(18px, 3vw, 34px) 24px; border-radius: 6px; color: var(--ink); background: #f4ecd8; box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
+  .grad__scroll::before, .grad__scroll::after { content: ''; position: absolute; top: -8px; bottom: -8px; width: 14px; border-radius: 7px; background: linear-gradient(90deg, #6b4528, #3b2516); }
+  .grad__scroll::before { left: -7px; } .grad__scroll::after { right: -7px; }
+  .lics { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .lic { position: relative; display: grid; justify-items: center; gap: 6px; text-align: center; overflow: hidden; padding-bottom: 6px; }
+  .lic__seal { display: grid; place-items: center; min-width: 96px; height: 64px; padding: 0 12px; border: 4px solid var(--red); border-radius: 10px; color: var(--red); font-family: var(--f-display); font-size: 22px; transform: rotate(-4deg); }
+  .lic--gold .lic__seal { border-color: #c98a1e; color: #b4740e; background: rgba(245, 200, 75, .25); }
+  .lic--charging .lic__seal { border-style: dashed; color: #7a6a5a; border-color: #9a8a7a; }
+  .lic__note { font-size: 12.5px; font-weight: 700; opacity: .8; }
+  .lic__charge { position: absolute; left: 10%; right: 10%; bottom: 0; height: 3px; border-radius: 2px; background: linear-gradient(90deg, transparent, #2e9beb, transparent); background-size: 50% 100%; background-repeat: no-repeat; animation: charge 1.6s linear infinite; }
+  @keyframes charge { from { background-position: -50% 0; } to { background-position: 150% 0; } }
+  .grad__langs { margin: 0; padding-top: 14px; border-top: 1.5px dashed rgba(22, 19, 28, .25); font-size: 15px; line-height: 2; }
+  .grad__langs .chip { color: var(--ink); border-color: rgba(22, 19, 28, .3); }
 
-  .form-flash { position: fixed; left: 0; right: 0; top: 50%; z-index: 55; height: clamp(120px, 22vh, 200px); transform: translateY(-50%) scaleY(0); display: grid; place-items: center; pointer-events: none;
-    background: repeating-conic-gradient(#14271f 0 25%, #0b0d0c 0 50%) 0 0 / 48px 48px; border-block: 4px solid var(--ink); box-shadow: 0 0 0 3px #4fd1a5; }
-  .form-flash p { margin: 0; padding: 0 24px; text-align: center; font-family: var(--f-brush); font-size: clamp(22px, 3.6vw, 52px); line-height: 1.15; color: #fff; text-shadow: 0 0 18px rgba(120, 220, 255, .8), 3px 3px 0 #000; }
-
-  @media (max-width: 860px) {
-    .status__cols { grid-template-columns: 1fr; }
-    .status__side { max-width: 360px; }
-    .licenses { grid-template-columns: 1fr; }
-    .tech__row { grid-template-columns: minmax(0, 1fr) 70px 2.6em; gap: 10px; }
+  @media (max-width: 900px) {
+    .rep__what { line-height: 1.15; }
+    .rep__ok { vertical-align: middle; margin-left: .4em; font-size: 10px; padding: 2px 6px; }
+    .montage__stage { grid-template-columns: 1fr; }
+    .montage__hero { width: min(80%, 340px); grid-row: 1; }
+    .dojo { grid-template-columns: 1fr; grid-template-areas: "stage" "seals" "count" "scroll"; }
+    .dojo__stage { height: auto; aspect-ratio: 4 / 5; }
+    .dojo__hero { left: 50%; height: 78%; }
+    .dojo__ring { left: 50%; top: 56%; width: 92%; }
+    .dojo__title { max-width: 70%; }
+    .dojo__inset { left: auto; right: 8%; top: 30%; }
+    .seals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .scrolls { min-height: 0; display: grid; }
+    .scroll { position: relative; inset: auto; }
+    .lics { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .montage__lines, .lic__charge, .dojo__stage.is-charging .pose img { animation: none; }
   }
 </style>

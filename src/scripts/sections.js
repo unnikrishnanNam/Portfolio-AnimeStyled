@@ -6,6 +6,8 @@ import { reduced, lock, unlock, jump, velocity } from './smooth.js';
 import { say, cardIn, primeCard, goTo, isQuiet, quiet } from './nav.js';
 import { playCold } from './coldopen.js';
 import { play as sfx } from './sfx.js';
+import { burstAt } from './burst.js';
+import { initDojo } from './dojo.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -74,42 +76,102 @@ function initOrigin(mm) {
   });
 }
 
-// ── EP.02 Training: routine, status window, breathing forms, CKA stamp ──
+// ── EP.02 Training: montage, breathing forms, final selection; night turns to dawn ──
 function initTraining(mm) {
+  const sec = $('#ep02');
+  const montage = $('[data-montage]', sec);
+  const reps = $$('.rep', montage);
+  const nums = reps.map((r) => $('.rep__n', r));
+  const oks = reps.map((r) => $('.rep__ok', r));
+  const day = $('[data-day]', montage);
+  const every = $('.montage__every', montage);
+  const pad = (n) => String(Math.round(n)).padStart(3, '0');
+
   mm.add(MOTION, () => {
-    gsap.from('.routine li', { xPercent: -12, opacity: 0, stagger: 0.12, duration: 0.5, ease: 'power3.out', scrollTrigger: { trigger: '.routine', start: 'top 75%' } });
-    gsap.from('.status__win', { y: 60, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.status', start: 'top 80%' } });
-    gsap.from('.tech__bar i', { scaleX: 0, stagger: 0.08, duration: 0.9, ease: 'power2.out', scrollTrigger: { trigger: '.tech', start: 'top 75%' } });
-    gsap.from('.lic', { y: 20, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out', scrollTrigger: { trigger: '.licenses', start: 'top 85%' } });
-    gsap.fromTo('[data-cka]', { scale: 3.2, rotation: -40, opacity: 0 }, {
-      scale: 1, rotation: -12, opacity: 1, duration: 0.42, ease: 'power4.in',
-      scrollTrigger: { trigger: '.cka', start: 'top 70%' },
-      onComplete: () => { sfx('stamp'); fx.jolt($('.cka'), 12); say('CKA: passed. Muffins takes full credit.'); },
-    });
+    // The sky warms from midnight to sunrise over the whole arc.
+    gsap.fromTo(sec, { '--dawn': 0 }, { '--dawn': 1, ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: 'bottom bottom', scrub: true } });
+    gsap.from('.forms__head > *', { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '.forms', start: 'top 80%' } });
+    gsap.from('.seal', { y: 40, opacity: 0, scale: 0.8, stagger: 0.06, duration: 0.5, ease: 'back.out(1.8)', scrollTrigger: { trigger: '.seals', start: 'top 92%' } });
   });
 
-  const flash = $('#form-flash'), flashText = $('#form-flash p'), live = $('#form-live');
-  let flashTl;
-  const boxes = $$('[data-loopbox]');
-  const cap = $('.loopbox__cap');
-  $$('.tech__row').forEach((row) => {
-    const show = () => {
-      flashText.textContent = row.dataset.form;
-      live.textContent = row.dataset.form;
-      const want = row.dataset.loop;
-      boxes.forEach((b) => b.classList.toggle('is-on', b.dataset.loopbox === want));
-      if (cap) cap.textContent = row.querySelector('.tech__name').textContent;
-      if (reduced) return;
-      if (flashTl) flashTl.kill();
-      sfx('whoosh');
-      flashTl = gsap.timeline()
-        .fromTo(flash, { scaleY: 0 }, { scaleY: 1, duration: 0.18, ease: 'power3.out' })
-        .fromTo(flashText, { opacity: 0, letterSpacing: '0.3em' }, { opacity: 1, letterSpacing: '0.02em', duration: 0.35, ease: 'power2.out' }, '<')
-        .to(flash, { scaleY: 0, duration: 0.22, ease: 'power3.in', delay: 1.1 });
+  // Montage: pinned on big screens, the reps count up one after another while the days fly by.
+  mm.add(BIG, () => {
+    sec.classList.add('is-pinned');
+    montage.classList.add('is-armed');
+    const counters = reps.map(() => ({ v: 0 }));
+    const d = { v: 1 };
+    nums.forEach((n) => (n.textContent = '0'));
+    day.textContent = pad(1);
+    const tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: { trigger: montage, start: 'top top', end: () => '+=' + window.innerHeight * 2.4, pin: true, scrub: 0.4, invalidateOnRefresh: true },
+    });
+    tl.to(d, { v: 365, duration: reps.length + 1, onUpdate: () => (day.textContent = pad(d.v)) }, 0);
+    reps.forEach((r, i) => {
+      const at = i;
+      tl.to(r, { opacity: 1, duration: 0.15 }, at)
+        .fromTo(r, { x: -30 }, { x: 0, duration: 0.3, ease: 'power3.out' }, at)
+        .to(counters[i], { v: +nums[i].dataset.to, duration: 0.7, ease: 'power1.out', onUpdate: () => (nums[i].textContent = String(Math.round(counters[i].v))) }, at)
+        .fromTo(oks[i], { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.12, ease: 'power4.in' }, at + 0.72);
+    });
+    tl.fromTo(every, { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'power4.in' }, reps.length + 0.1)
+      .add(() => { fx.jolt(every, 10); }, reps.length + 0.36)
+      .to({}, { duration: 0.5 });
+    return () => {
+      sec.classList.remove('is-pinned');
+      montage.classList.remove('is-armed');
+      gsap.set([...reps, ...oks, every], { clearProps: 'all' });
+      nums.forEach((n) => (n.textContent = n.dataset.to));
+      day.textContent = '365';
     };
-    row.addEventListener('mouseenter', show);
-    row.addEventListener('focus', show);
-    row.addEventListener('click', show);
+  });
+
+  // Smaller screens with motion: each rep counts up as it scrolls in.
+  mm.add(`not all and ${BIG}`, () => {
+    if (reduced) return;
+    const cs = reps.map(() => ({ v: 0 }));
+    nums.forEach((n) => (n.textContent = '0'));
+    reps.forEach((r, i) => {
+      const c = cs[i];
+      ScrollTrigger.create({
+        trigger: r, start: 'top 85%', once: true,
+        onEnter: () => {
+          gsap.to(c, { v: +nums[i].dataset.to, duration: 0.9, ease: 'power2.out', onUpdate: () => (nums[i].textContent = String(Math.round(c.v))) });
+          gsap.fromTo(oks[i], { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: 0.3, delay: 0.8, ease: 'power4.in' });
+        },
+      });
+    });
+    return () => {
+      gsap.killTweensOf([...cs, ...oks]);
+      gsap.set(oks, { clearProps: 'all' });
+      nums.forEach((n) => (n.textContent = n.dataset.to));
+    };
+  });
+  mm.add('(prefers-reduced-motion: reduce)', () => { gsap.set(oks, { opacity: 1 }); });
+
+  initDojo();
+
+  // Final selection: a slash splits the scene, the CKA seal slams down, petals, then the licence scroll unrolls.
+  const grad = $('[data-grad]', sec);
+  mm.add(MOTION, () => {
+    const slash = $('.grad__slash path', grad), splat = $('.grad__splat', grad), stamp = $('[data-cka]', grad);
+    const scroll = $('.grad__scroll', grad), lics = $$('.lic', grad);
+    const sun = $('.grad__sun', grad);
+    gsap.set(sun, { opacity: 0, yPercent: 30, scale: 0.6 });
+    gsap.set(stamp, { opacity: 0 });
+    gsap.set(scroll, { clipPath: 'inset(0 50% 0 50%)' });
+    const tl = gsap.timeline({ paused: true });
+    tl.to(slash, { strokeDashoffset: 0, duration: 0.28, ease: 'power4.in' })
+      .add(() => sfx('slash'), 0)
+      .fromTo(stamp, { scale: 3.2, rotation: -40, opacity: 0 }, { scale: 1, rotation: -12, opacity: 1, duration: 0.42, ease: 'power4.in' }, 0.2)
+      .add(() => { sfx('stamp'); fx.jolt(grad, 12); burstAt(stamp, { kind: 'petals', count: 46, spread: 1.6 }); say('CKA: passed. Muffins takes full credit.'); }, 0.62)
+      .fromTo(splat, { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.35, ease: 'back.out(2)' }, 0.62)
+      .to(sun, { opacity: 1, yPercent: 0, scale: 1, duration: 1.4, ease: 'power2.out' }, 0.5)
+      .to(slash, { opacity: 0, duration: 0.6 }, 0.9)
+      .to(scroll, { clipPath: 'inset(0 0% 0 0%)', duration: 0.7, ease: 'power3.inOut' }, 0.9)
+      .from(lics, { y: 20, opacity: 0, stagger: 0.1, duration: 0.4, ease: 'back.out(1.6)' }, 1.3);
+    ScrollTrigger.create({ trigger: $('.grad__stage', grad), start: 'top 72%', once: true, onEnter: () => tl.play() });
+    return () => { tl.kill(); gsap.set([stamp, scroll, splat, slash, sun, ...lics], { clearProps: 'all' }); };
   });
 }
 

@@ -45,10 +45,11 @@ export function setOn(v, silent = false) {
   if (on && !silent) play('blip');
 }
 
+const noop = () => {};
 export function play(kind) {
-  if (!on) return;
+  if (!on) return noop;
   let c;
-  try { c = ac(); } catch (e) { return; }
+  try { c = ac(); } catch (e) { return noop; }
   const t = c.currentTime;
   const out = c.createGain();
   out.gain.value = 0.32;
@@ -74,10 +75,37 @@ export function play(kind) {
   } else if (kind === 'power') {
     tone(c, out, t, 'sawtooth', 90, 900, 0.8, 0.35);
     tone(c, out, t + 0.05, 'square', 120, 1200, 0.7, 0.15);
+  } else if (kind === 'inhale') {
+    // A long breath in; returns a stop() so letting go cuts it off.
+    const n = noise(c, 1.8);
+    const f = c.createBiquadFilter();
+    f.type = 'bandpass'; f.Q.value = 0.9;
+    f.frequency.setValueAtTime(500, t);
+    f.frequency.exponentialRampToValueAtTime(2400, t + 1.6);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.5, t + 1.4);
+    n.connect(f).connect(g).connect(out);
+    n.start(t);
+    return () => { try { g.gain.cancelScheduledValues(c.currentTime); g.gain.setTargetAtTime(0.0001, c.currentTime, 0.03); n.stop(c.currentTime + 0.15); } catch (e) { /* already stopped */ } };
+  } else if (kind === 'slash') {
+    const n = noise(c, 0.35);
+    const f = c.createBiquadFilter();
+    f.type = 'highpass';
+    f.frequency.setValueAtTime(5000, t);
+    f.frequency.exponentialRampToValueAtTime(700, t + 0.25);
+    n.connect(f).connect(env(c, t, 1, 0.004, 0.28)).connect(out);
+    n.start(t);
+    tone(c, out, t, 'triangle', 1800, 240, 0.22, 0.25);
+  } else if (kind === 'chime') {
+    tone(c, out, t, 'sine', 988, 0, 0.5, 0.4);
+    tone(c, out, t + 0.09, 'sine', 1319, 0, 0.7, 0.35);
+    tone(c, out, t + 0.18, 'sine', 1976, 0, 0.9, 0.2);
   } else if (kind === 'bark') {
     tone(c, out, t, 'sawtooth', 620, 380, 0.09, 0.5);
     tone(c, out, t + 0.14, 'sawtooth', 680, 400, 0.1, 0.5);
   } else {
     tone(c, out, t, 'square', 880, 1320, 0.06, 0.25);
   }
+  return noop;
 }

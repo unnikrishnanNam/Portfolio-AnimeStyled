@@ -119,7 +119,7 @@ async function framesFromZip(zip) {
 }
 
 // One-shot animations (play once, hold the last frame): "-once" in the name, or listed here.
-const ONCE = new Set(['GIF-02']);
+const ONCE = new Set(['GIF-02', 'GIF-10']);
 
 async function anim(file, key, zip) {
   const base = key.replace('@p', '-p');

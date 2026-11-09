@@ -123,6 +123,12 @@ main { position: relative; z-index: 1; }
   letter-spacing: .01em;
 }
 
+/* Celebration bursts (scripts/burst.js) */
+.burst { position: fixed; inset: 0; z-index: 160; pointer-events: none; overflow: hidden; }
+.burst i { position: absolute; left: 0; top: 0; margin: -5px 0 0 -6px; will-change: transform, opacity; }
+.burst__petals { width: 13px; height: 9px; border-radius: 80% 0 80% 0; }
+.burst__sparks { width: 10px; height: 10px; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+
 /* Screentone + speed-line textures */
 .tone { background: radial-gradient(circle, currentColor 1.1px, transparent 1.5px) 0 0 / 7px 7px; }
 .speedlines {

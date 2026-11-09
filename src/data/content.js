@@ -26,16 +26,41 @@ export const episodes = [
   { id: 'ep06', n: '06', name: 'Finale', short: 'Finale', ml: 'തുടരും' },
 ];
 
-export const routine = ['100 kubectl commands.', '100 YAML files.', '100 failed pods.', '10 km of logs.', 'Every single day.'];
+// The training montage counts these up as you scroll.
+export const routine = [
+  { n: 100, what: 'kubectl commands' },
+  { n: 100, what: 'YAML files' },
+  { n: 100, what: 'failed pods' },
+  { n: 10, unit: 'km', what: 'of logs' },
+];
 
-// Ranks are placeholders to tune. `form` is the breathing-form name flashed on hover.
+// Breathing forms. Hold a seal to charge, release to strike. Ranks are placeholders to tune.
+// `el` picks the brush-stroke and colour; `proof` lines must stay true (they come from the rest of the site).
 export const skills = [
-  { name: 'Kubernetes', rank: 'S', level: 0.95, form: 'Container Breathing, First Form: Rolling Update', loop: 'GIF-03' },
-  { name: 'PostgreSQL · CNPG', rank: 'A', level: 0.84, form: 'Database Breathing, Third Form: Point-in-Time Recovery', loop: 'GIF-03' },
-  { name: 'Java 21 · Spring Boot', rank: 'A', level: 0.82, form: 'Thread Breathing, Second Form: Virtual Threads', loop: 'GIF-03' },
-  { name: 'Go', rank: 'A', level: 0.78, form: 'Gopher Breathing, Fourth Form: Goroutine Flurry', loop: 'GIF-03' },
-  { name: 'NATS · Kafka · RabbitMQ', rank: 'B', level: 0.68, form: 'Message Breathing, Fifth Form: Exactly-Once Delivery', loop: 'GIF-03' },
-  { name: 'Swift', rank: '???', level: 0.22, form: 'Notch Breathing, Form Zero: Still Learning', loop: 'R-01' },
+  {
+    name: 'Kubernetes', rank: 'S', el: 'water', kanji: '水', color: '#46b3ff', num: '壱ノ型', style: 'Container Breathing', move: 'First Form: Rolling Update',
+    proof: ['Certified Kubernetes Administrator, 2026.', 'Opscope: multi-cluster control with a live topology graph.', 'A CloudNativePG HA cluster on a hand-built kubeadm cluster.'],
+  },
+  {
+    name: 'PostgreSQL · CNPG', rank: 'A', el: 'stone', kanji: '岩', color: '#d9b077', num: '参ノ型', style: 'Database Breathing', move: 'Third Form: Point-in-Time Recovery',
+    proof: ['Highly available PostgreSQL in Energy IoT at Kalkitech.', 'Interceptor: a PostgreSQL wire-protocol proxy.', '−50% DB queries per webhook event in Whatomate, using RETURNING.'],
+  },
+  {
+    name: 'Java 21 · Spring Boot', rank: 'A', el: 'flame', kanji: '炎', color: '#ff6b2c', num: '弐ノ型', style: 'Thread Breathing', move: 'Second Form: Virtual Threads',
+    proof: ['QueueCTL: a single-JAR job queue on Java 21 virtual threads.', 'VM Provisioning Service: a Spring Boot API over RabbitMQ.', 'Oracle Java SE 21 (1Z0-830): charging.'],
+  },
+  {
+    name: 'Go', rank: 'A', el: 'wind', kanji: '風', color: '#6fe3b4', num: '肆ノ型', style: 'Gopher Breathing', move: 'Fourth Form: Goroutine Flurry',
+    proof: ['Opscope’s backend is written in Go.', 'Whatomate fix in Go, merged under Zerodha’s code review.'],
+  },
+  {
+    name: 'NATS · Kafka · RabbitMQ', rank: 'B', el: 'thunder', kanji: '雷', color: '#ffd23f', num: '伍ノ型', style: 'Message Breathing', move: 'Fifth Form: Exactly-Once Delivery',
+    proof: ['A TLS-secured NATS cluster at Kalkitech.', 'RabbitMQ behind the VM Provisioning Service.', 'Kafka in a JPMorgan Chase job simulation.'],
+  },
+  {
+    name: 'Swift', rank: '???', el: 'mist', kanji: '霞', color: '#b8a8ff', num: '零ノ型', style: 'Notch Breathing', move: 'Form Zero: Still Learning',
+    proof: ['GlassNotch: the MacBook notch as a Liquid Glass island. In production.', 'The form is not finished yet. Neither is the app.'],
+  },
 ];
 
 export const licenses = [
