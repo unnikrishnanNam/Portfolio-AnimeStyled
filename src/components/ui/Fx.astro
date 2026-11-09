@@ -22,6 +22,12 @@ import Art from '../Art.astro';
     <div class="fx__aura"></div>
     <div class="fx__rage"><Art id="R-02" sizes="60vw" eager fetchpriority="low" /></div>
   </div>
+  <div class="fx__ink">
+    <svg viewBox="0 0 200 200">
+      <path d="M100 18c14 0 18 22 30 24s30-14 38-2-12 26-6 38 30 14 26 28-28 6-36 16 2 34-12 40-20-18-36-18-28 26-40 18 2-30-8-40-38-4-40-18 26-18 26-32-24-22-14-32 30 8 40-2 14-22 32-22z" />
+      <g class="ink__drops"><circle cx="28" cy="40" r="7" /><circle cx="176" cy="58" r="5" /><circle cx="186" cy="150" r="8" /><circle cx="22" cy="168" r="6" /><circle cx="104" cy="194" r="4" /><circle cx="150" cy="12" r="4" /></g>
+    </svg>
+  </div>
   <div class="fx__fade"></div>
 </div>
 
@@ -67,4 +73,7 @@ import Art from '../Art.astro';
   .fx__rage { position: relative; width: min(560px, 70vw); border: 5px solid var(--ink); border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 6px var(--red), 0 0 80px 20px rgba(255, 60, 40, .7); }
   .fx__rage img { width: 100%; height: auto; }
   .fx__fade { background: var(--ink); }
+  .fx__ink { --hole: 0px; display: grid; place-items: center; overflow: hidden; -webkit-mask: radial-gradient(circle at 50% 50%, transparent var(--hole), #000 calc(var(--hole) + 1px)); mask: radial-gradient(circle at 50% 50%, transparent var(--hole), #000 calc(var(--hole) + 1px)); }
+  .fx__ink svg { width: 42vmax; overflow: visible; fill: #0b0d18; }
+  .fx__ink circle { transform-box: fill-box; transform-origin: center; }
 </style>

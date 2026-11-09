@@ -6,13 +6,15 @@ import { reduced } from './smooth.js';
 import { goTo, say } from './nav.js';
 import { play as sfx, setOn as setSfx, isOn as sfxOn } from './sfx.js';
 import { kubectl, episodes, person } from '../data/content.js';
+import { burstAt } from './burst.js';
 
 const html = document.documentElement;
 const order = episodes.map((e) => e.id);
 
 // ── Shared actions ────────────────────────────────────────
 export async function copyEmail() {
-  try { await navigator.clipboard.writeText(person.email); say('Email copied. Muffins approves.'); }
+  const from = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
+  try { await navigator.clipboard.writeText(person.email); say('Email copied. Muffins approves.'); if (from) burstAt(from, { kind: 'petals', count: 24 }); }
   catch (e) { say(person.email, { hold: 9000 }); }
   sfx('blip');
 }

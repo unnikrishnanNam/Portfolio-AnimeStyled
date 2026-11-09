@@ -200,7 +200,7 @@ function setKO(fight, on) {
         .to(boss, { filter: 'grayscale(1) brightness(1.6)', x: 30, rotation: 8, opacity: 0.35, duration: 0.3 }, 0)
         .to(vs, { autoAlpha: 0, scale: 0.6, duration: 0.2 }, 0)
         .fromTo(ko, { scale: 3, rotation: -30 }, { scale: 1, rotation: -8, duration: 0.28, ease: 'power4.in' }, 0)
-        .add(() => fx.jolt($('.fight__stage', fight), 12))
+        .add(() => { fx.jolt($('.fight__stage', fight), 12); burstAt(boss, { kind: 'sparks', count: 34, spread: 1.2 }); })
         .to(ko, { scale: 0.6, x: '30%', y: '-34%', duration: 0.4, ease: 'power3.inOut', delay: 0.35 })
         .to(vic, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, '<0.1');
     }

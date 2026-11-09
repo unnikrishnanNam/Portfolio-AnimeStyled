@@ -21,18 +21,21 @@ export function primeCard(sec) {
   if (!card || reduced) return;
   card.dataset.shown = '1';
   gsap.set(card.querySelectorAll('.epcard__no, .epcard__name, .epcard__ml'), { opacity: 0 });
+  gsap.set(card.querySelector('.epcard__brush'), { scaleX: 0 });
 }
 export function cardIn(sec) {
   const card = sec && sec.querySelector('[data-epcard]');
   if (!card) return;
   card.dataset.shown = '1';
   const no = card.querySelector('.epcard__no'), name = card.querySelector('.epcard__name'), ml = card.querySelector('.epcard__ml');
-  if (reduced) { gsap.fromTo([no, name, ml].filter(Boolean), { opacity: 0 }, { opacity: 1, duration: 0.3 }); return; }
+  const brush = card.querySelector('.epcard__brush');
+  if (reduced) { gsap.fromTo([no, name, ml].filter(Boolean), { opacity: 0 }, { opacity: 1, duration: 0.3 }); gsap.set(brush, { scaleX: 1 }); return; }
   const tl = gsap.timeline();
   tl.fromTo(no, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out' })
     .fromTo(name, { opacity: 0, scale: 1.6, skewX: -14, transformOrigin: '0% 60%' }, { opacity: 1, scale: 1, skewX: 0, duration: 0.32, ease: 'power4.in' }, '-=0.1')
     .add(() => fx.jolt(card, 9))
-    .fromTo(ml, { opacity: 0, y: 14 }, { opacity: 0.85, y: 0, duration: 0.4, ease: 'power2.out' }, '+=0.05');
+    .fromTo(brush, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: 'power3.inOut' }, '-=0.05')
+    .fromTo(ml, { opacity: 0, scale: 1.8, rotation: -8 }, { opacity: 0.85, scale: 1, rotation: 0, duration: 0.3, ease: 'power4.in', transformOrigin: '0% 50%' }, '-=0.2');
 }
 
 // ── Jumping between episodes ──────────────────────────────

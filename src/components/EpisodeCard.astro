@@ -6,6 +6,6 @@ const e = episodes.find((x) => x.id === ep)!;
 ---
 <header class:list={['epcard', { 'on-dark': dark }]} data-epcard>
   <span class="epcard__no">EP.{e.n}</span>
-  <h2 class="epcard__name">{heading || e.name}</h2>
+  <h2 class="epcard__name"><span class="epcard__brush" aria-hidden="true"></span><span class="epcard__txt">{heading || e.name}</span></h2>
   {e.ml && <span class="epcard__ml" lang="ml">{e.ml}</span>}
 </header>

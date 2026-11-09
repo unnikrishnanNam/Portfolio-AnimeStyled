@@ -6,6 +6,7 @@ import { initSections } from './sections.js';
 import { initReplays } from './replays.js';
 import { initColdOpen } from './coldopen.js';
 import { goTo } from './nav.js';
+import { initSpeedLines } from './motion.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,7 @@ const ui = initUI();
 initReplays();
 initSections(ui);
 initColdOpen();
+initSpeedLines();
 
 // Layout settles once fonts and lazy images arrive.
 const refresh = () => ScrollTrigger.refresh();

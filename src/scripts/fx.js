@@ -1,4 +1,4 @@
-// Transition engine: screentone, impact, slash, eyecatch, powerup, fade.
+// Transition engine: screentone, impact, slash, eyecatch, powerup, ink, fade.
 // run(type, { onCover }) plays the cover half, calls onCover while the screen
 // is hidden (that is where callers jump the scroll), then plays the reveal.
 import { gsap } from 'gsap';
@@ -28,6 +28,17 @@ export function run(type, { onCover, ec } = {}) {
       .add(cover)
       .to(el, { '--r': '0px', duration: 0.5, ease: 'power2.out', delay: 0.06 })
       .set(el, { visibility: 'hidden' });
+  } else if (kind === 'ink') {
+    const el = $('.fx__ink'), splat = $('.fx__ink svg');
+    const drops = root.querySelectorAll('.ink__drops circle');
+    sfx('whoosh');
+    tl.set(el, { visibility: 'visible', '--hole': '0px' })
+      .fromTo(splat, { scale: 0, rotation: -50 }, { scale: 6, rotation: 0, duration: 0.5, ease: 'power3.in' })
+      .fromTo(drops, { scale: 0 }, { scale: 1, duration: 0.25, stagger: 0.03, ease: 'back.out(3)' }, 0.04)
+      .add(cover)
+      .to(el, { '--hole': '120vmax', duration: 0.65, ease: 'power3.in', delay: 0.1 })
+      .set(el, { visibility: 'hidden' })
+      .set(splat, { scale: 0 });
   } else if (kind === 'impact') {
     const lines = $('.fx__lines'), flash = $('.fx__flash');
     sfx('impact');

@@ -739,3 +739,46 @@ Output aspect ratio: 4:5. Use this output ratio instead of any conflicting aspec
 ```
 
 > Check: This is your original image prompt with a no-text rule and a 4:5 ratio added.
+
+## P3 · Training arc extras (optional, 3)
+
+The site already works without these. When they land in `assets/raw/`, the Training arc picks them up automatically: GIF-09 replaces CH-04 in the Breathing Forms dojo, GIF-10 plays on every strike, and BG-04b fades in as the arc reaches sunrise.
+
+### GIF-09 · Breathing stance (loop)
+
+- **Save as:** `assets/raw/loops/GIF-09-breathing-stance.gif`
+- **Attach:** REF-01 · CH-04
+- **Ratio:** 3:4 · **Background:** Flat magenta
+
+```text
+Create a seamless looping GIF: 8 frames at about 160 ms per frame. The hero in the SIGNATURE OUTFIT, full body, in a low, wide ready stance like the attached CH-04, but holding a plain wooden practice sword (a smooth bokken, no guard, no markings) in both hands, angled low across the body. Eyes closed, completely focused. A slow, deep breath: the chest rises and falls once per loop and a thin wisp of white breath drifts from the mouth. Hair and the tied hoodie sleeves stir slightly. Feet stay planted on the same baseline in every frame; same scale and position throughout.
+Flat magenta background. Also give me the frames as separate PNGs in a zip.
+Output: 3:4.
+```
+
+> Check: Keep the framing identical to CH-04 (feet at the bottom edge, the whole figure inside the canvas). Do not draw water, fire or other effects; the site draws those.
+
+### GIF-10 · The strike (one-shot)
+
+- **Save as:** `assets/raw/loops/GIF-10-strike.gif`
+- **Attach:** GIF-09 frame 1 (PNG from the zip) · REF-01
+- **Ratio:** 3:4 · **Background:** Flat magenta
+
+```text
+Create an animated GIF that plays once and does not loop: 8 frames at about 70 ms per frame. Start from the attached frame exactly: same hero, same practice sword, same framing. The hero's eyes snap open and they lunge forward with one fast, sweeping horizontal strike from low left to high right, with a bold anime motion smear behind the sword on frames 3 to 5. End on a held follow-through pose: sword extended high, weight on the front foot, a calm, confident half-smile. Feet stay on the same baseline.
+Flat magenta background. Also give me the 8 frames as separate PNGs in a zip.
+Output: 3:4.
+```
+
+> Check: No effects other than the motion smear; the site adds the elemental brush stroke on top.
+
+### BG-04b · Dojo at sunrise
+
+- **Save as:** `assets/raw/backgrounds/BG-04b-dojo-dawn.png`
+- **Attach:** BG-04
+- **Ratio:** 16:9 · **Background:** Scene
+
+```text
+The attached server-rack dojo at sunrise, with the same camera, composition and every object in the same place. Warm golden light pours through the paper screens in long shafts, dust motes float in the beams, the floor glows amber, and the green server LEDs are softer against the daylight. Hopeful, calm, end-of-training mood. No people.
+Output: 16:9.
+```
